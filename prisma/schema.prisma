@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  name      String
+  phone     String
+  role      Role       @default(USER)
+  status    Status     @default(ACTIVE)
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  works     Works[]
+  audiLog   AuditLog[]
+}
+
+model Works {
+  id                String         @id @default(uuid())
+  title             String
+  description       String
+  finalObservations String
+  progress          StatusProgress @default(NOT_STARTED)
+  images            Images[]
+  createdAt         DateTime       @default(now())
+  status            Status         @default(ACTIVE)
+  stepsToWork       StepsToWork[]
+  startedAt         DateTime
+  finishedAt        DateTime
+  updatedAt         DateTime       @updatedAt
+  User              User?          @relation(fields: [userId], references: [id])
+  userId            String?
+  Clients           Clients?       @relation(fields: [clientsId], references: [id])
+  clientsId         String?
+}
+
+model StepsToWork {
+  id          String   @id @default(uuid())
+  description String
+  Works       Works?   @relation(fields: [worksId], references: [id])
+  worksId     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Images {
+  id        String   @id @default(uuid())
+  url       String
+  Works     Works?   @relation(fields: [worksId], references: [id])
+  worksId   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Clients {
+  id          String    @id @default(uuid())
+  name        String
+  phone       String
+  email       String
+  rut         String
+  nameFactory String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  works       Works[]
+  company     Company[]
+  status      Status    @default(ACTIVE)
+}
+
+model Company {
+  id          String   @id @default(uuid())
+  companyName String
+  location    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Clients     Clients? @relation(fields: [clientsId], references: [id])
+  clientsId   String?
+  status      Status   @default(ACTIVE)
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String // Descripción de la acción, por ejemplo: "LOGIN", "EDIT", "DELETE"
+  timestamp DateTime @default(now()) // Fecha y hora del evento
+  metadata  Json? // Información adicional, como datos del cambio o la IP del usuario 
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+enum Role {
+  USER
+  ADMIN
+  TECHNICIAN
+  CLIENT
+}
+
+enum StatusProgress {
+  IN_PROGRESS
+  FINISHED
+  NOT_STARTED
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
