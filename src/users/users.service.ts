@@ -29,8 +29,7 @@ export class UsersService {
 
     const user = await this.prisma.user.findUnique({
       where: {
-        email: loginUser.email,
-        password: loginUser.password
+        email: loginUser.email,        
       }
     })
 
