@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { UpdatePassUserDto } from './dto/update-password-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -17,6 +18,11 @@ export class UsersController {
   @Post('login')
   login(@Body() LoginUserDto: LoginUserDto) {
     return this.usersService.login(LoginUserDto);
+  }
+
+  @Patch('changepass/:id')
+  changepass(@Param('id') id: string, @Body() updatePassUserDto: UpdatePassUserDto) {
+    return this.usersService.changepass(id, updatePassUserDto);
   }
 
   @Get()
