@@ -68,9 +68,8 @@ model Clients {
   id          String    @id @default(uuid())
   name        String
   phone       String
-  email       String
-  rut         String
-  nameFactory String
+  email       String    @unique
+  rut         String    @unique
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   works       Works[]

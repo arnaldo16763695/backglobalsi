@@ -3,60 +3,46 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { CreateClientDto } from "./dto/create-client.dto";
+import { UpdateClientDto } from "./dto/update-client.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { LoginUserDto } from "./dto/login-user.dto";
-import { UpdatePassUserDto } from "./dto/update-password-user.dto";
 
-@Injectable() 
-export class UsersService {
+@Injectable()
+export class ClientsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createClientDto: CreateClientDto) {
     try {
-      const user = await this.prisma.user.create({
-        data: createUserDto,
+      const client = await this.prisma.clients.create({
+        data: createClientDto,
       });
 
-      return user;
+      return client;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
           throw new ConflictException(
-            `El usuario con el email: ${createUserDto.email}, ya existe`
+            `Email: ${createClientDto.email} o el rut: ${createClientDto.rut} , ya existe`
           );
           // throw new ConflictException(`User with name: ${createUserDto.name}, already exist`)
         }
       }
     }
   }
-  async login(loginUser: LoginUserDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: loginUser.email,
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException(`Credenciales invalidas`);
-    }
-
-    return user;
-  }
 
   findAll() {
     try {
-      return this.prisma.user.findMany({
+      return this.prisma.clients.findMany({
         where: {
           status: {
             in: ["ACTIVE", "INACTIVE"],
           },
         },
-        orderBy:{
-          updatedAt: 'desc'
-        }
+        include: { company: true, works: true },
+        orderBy: {
+          updatedAt: "desc",
+        },
       });
     } catch (error) {
       console.log(error);
@@ -64,7 +50,7 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({
+    const client = await this.prisma.clients.findUnique({
       where: {
         id,
         status: {
@@ -72,17 +58,17 @@ export class UsersService {
         },
       },
     });
-    if (!user) {
+    if (!client) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `El usuario con el id: ${id} no fue encontrado`
+        `El cliente con el id: ${id} no fue encontrado`
       );
     }
-    return user;
+    return client;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.prisma.user.findUnique({
+  async update(id: string, updateClientDto: UpdateClientDto) {
+    const client = await this.prisma.clients.findUnique({
       where: {
         id,
         status: {
@@ -90,19 +76,19 @@ export class UsersService {
         },
       },
     });
-    if (!user) {
+    if (!client) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `El usuario con el id: ${id} no fue encontrado`
+        `El cliente con el id: ${id} no fue encontrado`
       );
     }
 
     try {
-      return this.prisma.user.update({
+      return this.prisma.clients.update({
         where: {
           id,
         },
-        data: updateUserDto,
+        data: updateClientDto,
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -114,36 +100,8 @@ export class UsersService {
     }
   }
 
-  async changepass(id: string, updatePassUserDto: UpdatePassUserDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id,
-        status: {
-          in: ["ACTIVE", "INACTIVE"],
-        },
-      },
-    });
-    if (!user) {
-      // throw new NotFoundException(`User with id: ${id} not found`);
-      throw new NotFoundException(
-        `El usuario con el id: ${id} no fue encontrado`
-      );
-    }
-
-    try {
-      return this.prisma.user.update({
-        where: {
-          id,
-        },
-        data: updatePassUserDto,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   async remove(id: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.clients.findUnique({
       where: {
         id,
         status: {
@@ -154,12 +112,12 @@ export class UsersService {
     if (!user) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `El usuario con el id: ${id} no fue encontrado`
+        `El cliente con el id: ${id} no fue encontrado`
       );
     }
 
     try {
-      return this.prisma.user.update({
+      return this.prisma.clients.update({
         where: {
           id,
         },
