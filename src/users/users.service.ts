@@ -54,6 +54,9 @@ export class UsersService {
             in: ["ACTIVE", "INACTIVE"],
           },
         },
+        orderBy:{
+          updatedAt: 'desc'
+        }
       });
     } catch (error) {
       console.log(error);
