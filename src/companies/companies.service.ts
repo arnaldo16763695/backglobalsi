@@ -3,44 +3,45 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { CreateClientDto } from "./dto/create-client.dto";
-import { UpdateClientDto } from "./dto/update-client.dto";
+import { CreateCompanyDto } from "./dto/create-company.dto";
+import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 @Injectable()
-export class ClientsService {
+export class CompaniesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createClientDto: CreateClientDto) {
+  async create(createCompanyDto: CreateCompanyDto) {
     try {
-      const client = await this.prisma.clients.create({
-        data: createClientDto,
+      const company = await this.prisma.company.create({
+        data: createCompanyDto,
       });
 
-      return client;
+      return company;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
           throw new ConflictException(
-            `Email: ${createClientDto.email} o el rut: ${createClientDto.rut} , ya existe`
+            `El Rut: ${createCompanyDto.rut}, ya existe`
           );
-          // throw new ConflictException(`User with name: ${createUserDto.name}, already exist`)
         }
       }
-      console.log(error)
+      console.log(error);
     }
   }
 
   findAll() {
     try {
-      return this.prisma.clients.findMany({
+      return this.prisma.company.findMany({
         where: {
           status: {
             in: ["ACTIVE", "INACTIVE"],
           },
         },
-        include: { company: true, works: true },
+        include: {
+          Clients: true,
+        },
         orderBy: {
           updatedAt: "desc",
         },
@@ -50,55 +51,56 @@ export class ClientsService {
     }
   }
 
-  async findOne(id: string) {
+  findOne(id: string) {
     try {
-      const client = await this.prisma.clients.findUnique({
+      const company = this.prisma.company.findUnique({
         where: {
           id,
           status: {
             in: ["ACTIVE", "INACTIVE"],
           },
         },
+        include: {
+          Clients: true,
+        },
       });
-      if (!client) {
+
+      if (!company) {
         // throw new NotFoundException(`User with id: ${id} not found`);
         throw new NotFoundException(
-          `El cliente con el id: ${id} no fue encontrado`
+          `La empresa con el id: ${id} no fue encontrada`
         );
       }
-      return client;
     } catch (error) {
       console.log(error);
     }
   }
 
-  async update(id: string, updateClientDto: UpdateClientDto) {
-    const client = await this.prisma.clients.findUnique({
+  async update(id: string, updateCompanyDto: UpdateCompanyDto) {
+    const company = await this.prisma.company.findUnique({
       where: {
         id,
-        status: {
-          in: ["ACTIVE", "INACTIVE"],
-        },
       },
     });
-    if (!client) {
+
+    if (!company) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `El cliente con el id: ${id} no fue encontrado`
+        `La empresa con el id: ${id} no fue encontrada`
       );
     }
 
     try {
-      return this.prisma.clients.update({
+      return this.prisma.company.update({
         where: {
           id,
         },
-        data: updateClientDto,
+        data: updateCompanyDto,
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
-          throw new ConflictException(`El usuario con el id: ${id}, ya existe`);
+          throw new ConflictException(`La empresa con el id: ${id}, ya existe`);
           // throw new ConflictException(`User with id: ${id}, already exist`)
         }
       }
@@ -106,7 +108,7 @@ export class ClientsService {
   }
 
   async remove(id: string) {
-    const user = await this.prisma.clients.findUnique({
+    const user = await this.prisma.company.findUnique({
       where: {
         id,
         status: {
@@ -117,12 +119,12 @@ export class ClientsService {
     if (!user) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `El cliente con el id: ${id} no fue encontrado`
+        `La empresa con el id: ${id} no fue encontrada`
       );
     }
 
     try {
-      return this.prisma.clients.update({
+      return this.prisma.company.update({
         where: {
           id,
         },

@@ -2,15 +2,15 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { PrismaService } from "src/prisma/prisma.service";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { LoginUserDto } from "./dto/login-user.dto";
-import { UpdatePassUserDto } from "./dto/update-password-user.dto";
+} from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { LoginUserDto } from './dto/login-user.dto';
+import { UpdatePassUserDto } from './dto/update-password-user.dto';
 
-@Injectable() 
+@Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
@@ -23,15 +23,38 @@ export class UsersService {
       return user;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
+        if (error.code === 'P2002') {
           throw new ConflictException(
-            `El usuario con el email: ${createUserDto.email}, ya existe`
+            `El usuario con el email: ${createUserDto.email}, ya existe`,
           );
           // throw new ConflictException(`User with name: ${createUserDto.name}, already exist`)
         }
       }
     }
   }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    try {
+      return await this.prisma.user.update({
+        data: updateUserDto,
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictException(
+            `El usuario con el email: ${updateUserDto.email}, ya existe`,
+          );
+        }
+      }
+      // Si el error no es de Prisma, lo relanzamos para que se maneje en otro lugar
+      console.error('Error no manejado:', error);
+      throw error;
+    }
+  }
+
   async login(loginUser: LoginUserDto) {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -51,12 +74,12 @@ export class UsersService {
       return this.prisma.user.findMany({
         where: {
           status: {
-            in: ["ACTIVE", "INACTIVE"],
+            in: ['ACTIVE', 'INACTIVE'],
           },
         },
-        orderBy:{
-          updatedAt: 'desc'
-        }
+        orderBy: {
+          updatedAt: 'desc',
+        },
       });
     } catch (error) {
       console.log(error);
@@ -68,50 +91,17 @@ export class UsersService {
       where: {
         id,
         status: {
-          in: ["ACTIVE", "INACTIVE"],
+          in: ['ACTIVE', 'INACTIVE'],
         },
       },
     });
     if (!user) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `El usuario con el id: ${id} no fue encontrado`
+        `El usuario con el id: ${id} no fue encontrado`,
       );
     }
     return user;
-  }
-
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id,
-        status: {
-          in: ["ACTIVE", "INACTIVE"],
-        },
-      },
-    });
-    if (!user) {
-      // throw new NotFoundException(`User with id: ${id} not found`);
-      throw new NotFoundException(
-        `El usuario con el id: ${id} no fue encontrado`
-      );
-    }
-
-    try {
-      return this.prisma.user.update({
-        where: {
-          id,
-        },
-        data: updateUserDto,
-      });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
-          throw new ConflictException(`El usuario con el id: ${id}, ya existe`);
-          // throw new ConflictException(`User with id: ${id}, already exist`)
-        }
-      }
-    }
   }
 
   async changepass(id: string, updatePassUserDto: UpdatePassUserDto) {
@@ -119,14 +109,14 @@ export class UsersService {
       where: {
         id,
         status: {
-          in: ["ACTIVE", "INACTIVE"],
+          in: ['ACTIVE', 'INACTIVE'],
         },
       },
     });
     if (!user) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `El usuario con el id: ${id} no fue encontrado`
+        `El usuario con el id: ${id} no fue encontrado`,
       );
     }
 
@@ -147,14 +137,14 @@ export class UsersService {
       where: {
         id,
         status: {
-          in: ["ACTIVE", "INACTIVE"],
+          in: ['ACTIVE', 'INACTIVE'],
         },
       },
     });
     if (!user) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `El usuario con el id: ${id} no fue encontrado`
+        `El usuario con el id: ${id} no fue encontrado`,
       );
     }
 
@@ -164,7 +154,7 @@ export class UsersService {
           id,
         },
         data: {
-          status: "DELETED",
+          status: 'DELETED',
         },
       });
     } catch (error) {
