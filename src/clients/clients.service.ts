@@ -89,7 +89,7 @@ export class ClientsService {
     }
 
     try {
-      return this.prisma.clients.update({
+      return await this.prisma.clients.update({
         where: {
           id,
         },
@@ -98,7 +98,7 @@ export class ClientsService {
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
-          throw new ConflictException(`El usuario con el id: ${id}, ya existe`);
+          throw new ConflictException(`El cliente con el email: ${updateClientDto.email}, ya existe`);
           // throw new ConflictException(`User with id: ${id}, already exist`)
         }
       }

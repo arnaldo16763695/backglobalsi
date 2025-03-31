@@ -51,9 +51,9 @@ export class CompaniesService {
     }
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     try {
-      const company = this.prisma.company.findUnique({
+      const company = await this.prisma.company.findUnique({
         where: {
           id,
           status: {
@@ -71,6 +71,8 @@ export class CompaniesService {
           `La empresa con el id: ${id} no fue encontrada`
         );
       }
+
+      return company;
     } catch (error) {
       console.log(error);
     }
@@ -80,6 +82,9 @@ export class CompaniesService {
     const company = await this.prisma.company.findUnique({
       where: {
         id,
+      },
+      include: {
+        Clients: true,
       },
     });
 
