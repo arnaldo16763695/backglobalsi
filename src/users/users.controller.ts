@@ -2,8 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
 import { UpdatePassUserDto } from './dto/update-password-user.dto';
+import { JwtGuard } from 'src/auth/guard/jwt.guard';
+import { UseGuards } from '@nestjs/common';
 
 @Controller('users')
 export class UsersController {
@@ -12,24 +13,20 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
-  }
-
+  } 
   
-  @Post('login')
-  login(@Body() LoginUserDto: LoginUserDto) {
-    return this.usersService.login(LoginUserDto);
-  }
-
   @Patch('changepass/:id')
   changepass(@Param('id') id: string, @Body() updatePassUserDto: UpdatePassUserDto) {
     return this.usersService.changepass(id, updatePassUserDto);
   }
-
+  
+  @UseGuards(JwtGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
+  @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);

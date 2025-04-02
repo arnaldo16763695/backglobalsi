@@ -7,30 +7,41 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { LoginUserDto } from './dto/login-user.dto';
 import { UpdatePassUserDto } from './dto/update-password-user.dto';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    try {
-      const user = await this.prisma.user.create({
-        data: createUserDto,
-      });
-
-      return user;
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ConflictException(
-            `El usuario con el email: ${createUserDto.email}, ya existe`,
-          );
-          // throw new ConflictException(`User with name: ${createUserDto.name}, already exist`)
-        }
-      }
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: createUserDto.email,
+      },
+    });
+    if (user) {
+      throw new ConflictException('User already exists');
     }
+
+    const newUser = await this.prisma.user.create({
+      data: {
+        ...createUserDto,
+        password: await hash(createUserDto.password, 10),
+      },
+    });
+
+    const { password, ...result } = newUser;
+
+    return result;
+  }
+
+  async findByEmail(email: string) {
+    return await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
@@ -53,21 +64,7 @@ export class UsersService {
       console.error('Error no manejado:', error);
       throw error;
     }
-  }
-
-  async login(loginUser: LoginUserDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: loginUser.email,
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException(`Credenciales invalidas`);
-    }
-
-    return user;
-  }
+  }  
 
   findAll() {
     try {
