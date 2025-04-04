@@ -6,6 +6,7 @@ import { UsersService } from 'src/users/users.service';
 import { compare } from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common';
 
+const EXPIRES_TIME = 20 * 1000;
 @Injectable()
 export class AuthService { 
   constructor(
@@ -35,6 +36,7 @@ export class AuthService {
           expiresIn: '7d',
           secret: process.env.JWT_REFRESH_TOKEN_KEY,
         }),
+        expiresIn: new Date().setTime(new Date().getTime() + EXPIRES_TIME),
       },
     };
   }
@@ -62,23 +64,8 @@ export class AuthService {
       refreshToken: await this.jwtService.signAsync(payload, {
         expiresIn: '7d',
         secret: process.env.JWT_REFRESH_TOKEN_KEY,
-      }),
+      }), 
+      expiresIn: new Date().setTime(new Date().getTime() + EXPIRES_TIME),
     };
-  }
-
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
   }
 }

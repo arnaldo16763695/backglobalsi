@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdatePassUserDto } from './dto/update-password-user.dto';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
 import { UseGuards } from '@nestjs/common';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
@@ -21,6 +22,8 @@ export class UsersController {
   }
   
   @UseGuards(JwtGuard)
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, description: 'The users have been successfully retrieved.' })
   @Get()
   findAll() {
     return this.usersService.findAll();

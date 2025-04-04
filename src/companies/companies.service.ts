@@ -2,11 +2,11 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from "@nestjs/common";
-import { CreateCompanyDto } from "./dto/create-company.dto";
-import { UpdateCompanyDto } from "./dto/update-company.dto";
-import { PrismaService } from "src/prisma/prisma.service";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+} from '@nestjs/common';
+import { CreateCompanyDto } from './dto/create-company.dto';
+import { UpdateCompanyDto } from './dto/update-company.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class CompaniesService {
@@ -21,9 +21,9 @@ export class CompaniesService {
       return company;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
+        if (error.code === 'P2002') {
           throw new ConflictException(
-            `El Rut: ${createCompanyDto.rut}, ya existe`
+            `El Rut: ${createCompanyDto.rut}, ya existe`,
           );
         }
       }
@@ -36,14 +36,14 @@ export class CompaniesService {
       return this.prisma.company.findMany({
         where: {
           status: {
-            in: ["ACTIVE", "INACTIVE"],
+            in: ['ACTIVE', 'INACTIVE'],
           },
         },
         include: {
           Clients: true,
         },
         orderBy: {
-          updatedAt: "desc",
+          updatedAt: 'desc',
         },
       });
     } catch (error) {
@@ -57,7 +57,7 @@ export class CompaniesService {
         where: {
           id,
           status: {
-            in: ["ACTIVE", "INACTIVE"],
+            in: ['ACTIVE', 'INACTIVE'],
           },
         },
         include: {
@@ -68,7 +68,7 @@ export class CompaniesService {
       if (!company) {
         // throw new NotFoundException(`User with id: ${id} not found`);
         throw new NotFoundException(
-          `La empresa con el id: ${id} no fue encontrada`
+          `La empresa con el id: ${id} no fue encontrada`,
         );
       }
 
@@ -79,24 +79,24 @@ export class CompaniesService {
   }
 
   async update(id: string, updateCompanyDto: UpdateCompanyDto) {
-    const company = await this.prisma.company.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        Clients: true,
-      },
-    });
-
-    if (!company) {
-      // throw new NotFoundException(`User with id: ${id} not found`);
-      throw new NotFoundException(
-        `La empresa con el id: ${id} no fue encontrada`
-      );
-    }
-
     try {
-      return this.prisma.company.update({
+      const company = await this.prisma.company.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          Clients: true,
+        },
+      });
+
+      if (!company) {
+        // throw new NotFoundException(`User with id: ${id} not found`);
+        throw new NotFoundException(
+          `La empresa con el id: ${id} no fue encontrada`,
+        );
+      }
+
+      return await this.prisma.company.update({
         where: {
           id,
         },
@@ -104,11 +104,15 @@ export class CompaniesService {
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
-          throw new ConflictException(`La empresa con el id: ${id}, ya existe`);
-          // throw new ConflictException(`User with id: ${id}, already exist`)
+        if (error.code === 'P2002') {
+          throw new ConflictException(
+            `La empresa con el rut: ${updateCompanyDto.rut}, ya existe`,
+          );
         }
       }
+      // Si el error no es de Prisma, lo relanzamos para que se maneje en otro lugar
+      console.error('Error no manejado:', error);
+      throw error;
     }
   }
 
@@ -117,14 +121,14 @@ export class CompaniesService {
       where: {
         id,
         status: {
-          in: ["ACTIVE", "INACTIVE"],
+          in: ['ACTIVE', 'INACTIVE'],
         },
       },
     });
     if (!user) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `La empresa con el id: ${id} no fue encontrada`
+        `La empresa con el id: ${id} no fue encontrada`,
       );
     }
 
@@ -134,7 +138,7 @@ export class CompaniesService {
           id,
         },
         data: {
-          status: "DELETED",
+          status: 'DELETED',
         },
       });
     } catch (error) {

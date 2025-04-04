@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
@@ -18,7 +19,11 @@ export class ClientsService {
         data: createClientDto,
       });
 
-      return client;
+      return {
+        statusCode: HttpStatus.CREATED,
+        data: client,
+        message: "The client has been successfully created.",
+      };
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === "P2002") {

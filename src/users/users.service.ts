@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -32,8 +33,11 @@ export class UsersService {
     });
 
     const { password, ...result } = newUser;
-
-    return result;
+    return {
+      statusCode: HttpStatus.CREATED,
+      data: result,
+      message: "The client has been successfully created.",
+    };
   }
 
   async findByEmail(email: string) {
@@ -63,7 +67,7 @@ export class UsersService {
       // Si el error no es de Prisma, lo relanzamos para que se maneje en otro lugar
       console.error('Error no manejado:', error);
       throw error;
-    }
+    } 
   }  
 
   findAll() {
