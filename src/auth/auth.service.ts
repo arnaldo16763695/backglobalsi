@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UsersService } from 'src/users/users.service';
 import { compare } from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common';
 
-const EXPIRES_TIME = 20 * 1000;
+const EXPIRES_TIME = 30 * 60 * 1000;
 @Injectable()
 export class AuthService { 
   constructor(
