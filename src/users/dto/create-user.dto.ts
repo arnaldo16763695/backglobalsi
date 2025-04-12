@@ -1,24 +1,24 @@
 import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Sanitize } from '@/decorators/sanitize.decorator';
 
 export class CreateUserDto{
-    @Transform(({ value }) => value?.trimStart())
+    @Sanitize()
     @IsString()
     @IsNotEmpty()    
     name: string;
 
-    @Transform(({ value }) => value?.trimStart())
+    @Sanitize()
     @IsString()
     @IsNotEmpty()
     @IsEmail()
     email:string;
 
-    @Transform(({ value }) => value?.trimStart())
+    @Sanitize()
     @IsString()
     @IsNotEmpty()
     password:string;
 
-    @Transform(({ value }) => value?.trimStart())
+    @Sanitize()
     @IsString()
     @IsNotEmpty()
     phone: string;

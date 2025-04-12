@@ -1,8 +1,8 @@
-import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsString, IsNotEmpty } from 'class-validator';
+import { Sanitize } from '@/decorators/sanitize.decorator';
 
 export class UpdatePassUserDto {
-    @Transform(({ value }) => value?.trimStart())
+    @Sanitize()
     @IsString()
     @IsNotEmpty()
     password: string;  

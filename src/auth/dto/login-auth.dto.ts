@@ -1,13 +1,13 @@
 import { IsString, IsNotEmpty } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Sanitize } from '@/decorators/sanitize.decorator';
 
 export class LoginAuthDto {
-  @Transform(({ value }) => value?.trimStart())
+  @Sanitize()
   @IsString()
   @IsNotEmpty()
   email: string;
 
-  @Transform(({ value }) => value?.trimStart())
+  @Sanitize()
   @IsString()
   @IsNotEmpty()
   password: string;

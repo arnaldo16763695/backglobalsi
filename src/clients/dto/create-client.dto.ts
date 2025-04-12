@@ -1,24 +1,26 @@
+import { Sanitize } from '@/decorators/sanitize.decorator';
 import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
-import { Transform } from 'class-transformer';
+
 
 export class CreateClientDto{
-    @Transform(({ value }) => value?.trimStart())
+    @Sanitize()
     @IsString()
     @IsNotEmpty()    
     name: string;
 
-    @Transform(({ value }) => value?.trimStart())
+    @Sanitize() 
     @IsString()
     @IsNotEmpty()
     @IsEmail()
     email:string;
 
-    @Transform(({ value }) => value?.trimStart())
+
+    @Sanitize() 
     @IsString()
     @IsNotEmpty()
     rut:string;
 
-    @Transform(({ value }) => value?.trimStart())
+    @Sanitize() 
     @IsString()
     @IsNotEmpty()
     phone: string;

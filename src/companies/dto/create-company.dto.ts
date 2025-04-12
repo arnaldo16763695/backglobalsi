@@ -1,39 +1,38 @@
 import { IsString, IsNotEmpty, IsEmail } from "class-validator";
-import { Transform } from "class-transformer";
+import { Sanitize } from "@/decorators/sanitize.decorator";
 
 export class CreateCompanyDto {
-  
-  @Transform(({ value }) => value?.trimStart())
+  @Sanitize()
   @IsString()
   @IsNotEmpty()
   rut: string;
 
-  @Transform(({ value }) => value?.trimStart())
+  @Sanitize()
   @IsString()
   @IsNotEmpty()
   companyName: string;
 
-  @Transform(({ value }) => value?.trimStart())
+  @Sanitize()
   @IsString()
   @IsNotEmpty()
   location: string;
 
-  @Transform(({ value }) => value?.trimStart())
+  @Sanitize()
   @IsString()
   @IsNotEmpty()
   clientsId: string;
 
-  @Transform(({ value }) => value?.trimStart())
+  @Sanitize()
   @IsString()
   observations: string;
 
-  @Transform(({ value }) => value?.trimStart())
+  @Sanitize()
   @IsString()
   @IsNotEmpty()
   @IsEmail()
   email: string;
 
-  @Transform(({ value }) => value?.trimStart())
+  @Sanitize()
   @IsString()
   @IsNotEmpty()
   phone: string;
