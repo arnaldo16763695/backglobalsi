@@ -25,7 +25,6 @@ export class CreateCompanyDto {
 
   @Transform(({ value }) => value?.trimStart())
   @IsString()
-  @IsNotEmpty()
   observations: string;
 
   @Transform(({ value }) => value?.trimStart())

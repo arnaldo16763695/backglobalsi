@@ -45,7 +45,7 @@ export class ClientsService {
             in: ["ACTIVE", "INACTIVE"],
           },
         },
-        include: { company: true, works: true },
+        include: { company: true },
         orderBy: {
           updatedAt: "desc",
         },
