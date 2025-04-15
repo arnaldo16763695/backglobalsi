@@ -2,18 +2,29 @@ import { Injectable } from '@nestjs/common';
 import { CreateWorkDto } from './dto/create-work.dto';
 import { UpdateWorkDto } from './dto/update-work.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { generateOrderCode } from '@/utils/generate-work-code';
 
 @Injectable()
 export class WorksService {
   constructor(private prisma: PrismaService) {}
 
   async create(createWorkDto: CreateWorkDto) {
-    return this.prisma.works.create({
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const countToday = await this.prisma.works.count({
+      where: {
+        createdAt: { gte: today },
+      },
+    });
+
+    const code = generateOrderCode(countToday + 1); 
+
+    return await this.prisma.works.create({
       data: {
-        description: createWorkDto.description,
-        finalObservations: createWorkDto.finalObservations,
         userId: createWorkDto.userId,
-        companyId: createWorkDto.companyId,       
+        companyId: createWorkDto.companyId,
+        workCode: code
       },
     });
   }

@@ -17,11 +17,10 @@ export class AuthService {
   async login(loginAuthDto: LoginAuthDto) {
     const user = await this.validateUser(loginAuthDto);
     const payload = {
+      sub: user.id, // ahora sub será el ID, como recomienda la convención JWT
       email: user.email,
-      sub: {
-        name: user.name,
-        role: user.role,
-      },
+      name: user.name,
+      role: user.role,
     };
 
     return {
@@ -51,8 +50,10 @@ export class AuthService {
 
   async refreshToken(user: any) {
     const payload = {
+      sub: user.id || user.sub, // asegura que siempre tenga el id
       email: user.email,
-      sub: user.sub
+      name: user.name,       
+      role: user.role,       
     };
     
     return {
