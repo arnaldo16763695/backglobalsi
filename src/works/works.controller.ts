@@ -7,6 +7,8 @@ import { JwtGuard } from 'src/auth/guard/jwt.guard';
 import { Roles } from '@/decorators/roles.decorator';
 import { RolesGuard } from '@/auth/guard/roles.guard';
 import { UseGuards } from '@nestjs/common';
+import { UpdateStatusWorkDto } from './dto/update-status-work.dto';
+import { UpdateCompanyWorkDto } from './dto/update-company-work.dto';
 
 @UseGuards(JwtGuard, RolesGuard)
 @Controller('works')
@@ -41,9 +43,17 @@ export class WorksController {
   @ApiResponse({ status: 200, description: 'The work has been successfully updated.' })
   @Roles('ADMIN')
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWorkDto: UpdateWorkDto) {
-    return this.worksService.update(id, updateWorkDto);
-  }
+  update(@Param('id') id: string, @Body() updateStatusWorkDto: UpdateStatusWorkDto) {
+    return this.worksService.updateStatusWork(id, updateStatusWorkDto);
+  } 
+
+  @ApiOperation({ summary: 'Update a specific work' })
+  @ApiResponse({ status: 200, description: 'The work has been successfully updated.' })
+  @Roles('ADMIN')
+  @Patch('companyinwork/:id')
+  updateCompanyInWork(@Param('id') id: string, @Body() updateCompanyWorkDto: UpdateCompanyWorkDto) {
+    return this.worksService.updateCompanyInWork(id, updateCompanyWorkDto);
+  } 
 
   @ApiOperation({ summary: 'Delete a specific work' })
   @ApiResponse({ status: 200, description: 'The work has been successfully deleted.' })

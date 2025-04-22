@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateWorkDto } from './dto/create-work.dto';
-import { UpdateWorkDto } from './dto/update-work.dto';
+import { UpdateStatusWorkDto } from './dto/update-status-work.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { generateOrderCode } from '@/utils/generate-work-code';
+import { UpdateCompanyWorkDto } from './dto/update-company-work.dto';
 
 @Injectable()
 export class WorksService {
@@ -43,16 +44,30 @@ export class WorksService {
       where: { id },
       include: {
         User: true,
-        company: true,
+        company: true,        
       },
     });
   }
 
-  async update(id: string, updateWorkDto: UpdateWorkDto) {
-    return this.prisma.works.update({
-      where: { id },
-      data: updateWorkDto,
-    });
+  async updateStatusWork(id: string, updateStatusWorkDto: UpdateStatusWorkDto) {
+    try {
+      return this.prisma.works.update({
+        where: { id },
+        data: updateStatusWorkDto,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async updateCompanyInWork(id: string, updateCompanyWorkDto: UpdateCompanyWorkDto) {
+    try {
+      return this.prisma.works.update({
+        where: { id },
+        data: updateCompanyWorkDto,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async remove(id: string) {

@@ -26,6 +26,7 @@ model User {
   works         Works[]
   audiLog       AuditLog[]
   assignedWorks WorkTechnician[] // trabajos que le asignaron como técnico
+  StepsToWork   StepsToWork[]
 }
 
 model Works {
@@ -34,7 +35,7 @@ model Works {
   description       String?
   finalObservations String?
   progress          StatusProgress   @default(NOT_STARTED)
-  images            Images[]
+  images            ImagesWorks[]
   createdAt         DateTime         @default(now())
   status            Status           @default(ACTIVE)
   stepsToWork       StepsToWork[]
@@ -61,19 +62,33 @@ model WorkTechnician {
 }
 
 model StepsToWork {
-  id          String   @id @default(uuid())
-  description String
-  Works       Works?   @relation(fields: [worksId], references: [id])
-  worksId     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String             @id @default(uuid())
+  order            Int
+  description      String
+  Works            Works?             @relation(fields: [worksId], references: [id])
+  worksId          String
+  user             User?              @relation(fields: [userId], references: [id])
+  userId           String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  ImagesStepToWork ImagesStepToWork[]
+  @@unique([worksId, description])
 }
 
-model Images {
+model ImagesStepToWork {
+  id            String       @id @default(uuid())
+  url           String
+  StepsToWork   StepsToWork? @relation(fields: [stepsToWorkId], references: [id])
+  stepsToWorkId String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model ImagesWorks {
   id        String   @id @default(uuid())
   url       String
   Works     Works?   @relation(fields: [worksId], references: [id])
-  worksId   String?
+  worksId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

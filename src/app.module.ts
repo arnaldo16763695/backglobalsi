@@ -5,10 +5,11 @@ import { CompaniesModule } from './companies/companies.module';
 import { AuthModule } from './auth/auth.module';
 import { WorksModule } from './works/works.module';
 import { AuditsModule } from './audits/audits.module';
+import { StepstoworksModule } from './stepstoworks/stepstoworks.module';
 
 
 @Module({
-  imports: [UsersModule, ClientsModule, CompaniesModule, AuthModule, WorksModule, AuditsModule],
+  imports: [UsersModule, ClientsModule, CompaniesModule, AuthModule, WorksModule, AuditsModule, StepstoworksModule],
   controllers: [],
   providers: [],
 })
