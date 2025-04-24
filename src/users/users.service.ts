@@ -36,7 +36,7 @@ export class UsersService {
     return {
       statusCode: HttpStatus.CREATED,
       data: result,
-      message: "The client has been successfully created.",
+      message: 'The client has been successfully created.',
     };
   }
 
@@ -67,8 +67,8 @@ export class UsersService {
       // Si el error no es de Prisma, lo relanzamos para que se maneje en otro lugar
       console.error('Error no manejado:', error);
       throw error;
-    } 
-  }  
+    }
+  }
 
   findAll() {
     try {
@@ -132,6 +132,8 @@ export class UsersService {
       console.log(error);
     }
   }
+
+
 
   async remove(id: string) {
     const user = await this.prisma.user.findUnique({

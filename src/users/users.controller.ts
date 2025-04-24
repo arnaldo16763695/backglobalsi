@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -12,22 +20,30 @@ import { Roles } from '@/decorators/roles.decorator';
 @UseGuards(JwtGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
-  
-  @Roles('ADMIN') 
+  constructor(private readonly usersService: UsersService) {}
+
+
+
+  @Roles('ADMIN')
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
-  } 
-  
+  }
+
   @Roles('ADMIN')
   @Patch('changepass/:id')
-  changepass(@Param('id') id: string, @Body() updatePassUserDto: UpdatePassUserDto) {
+  changepass(
+    @Param('id') id: string,
+    @Body() updatePassUserDto: UpdatePassUserDto,
+  ) {
     return this.usersService.changepass(id, updatePassUserDto);
   }
-  
+
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, description: 'The users have been successfully retrieved.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The users have been successfully retrieved.',
+  })
   @Roles('ADMIN')
   @Get()
   findAll() {
@@ -39,7 +55,7 @@ export class UsersController {
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
-  
+
   @Roles('ADMIN')
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -51,4 +67,4 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
-} 
+}

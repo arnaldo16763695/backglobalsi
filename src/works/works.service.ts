@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateWorkDto } from './dto/create-work.dto';
-import { UpdateStatusWorkDto } from './dto/update-status-work.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { generateOrderCode } from '@/utils/generate-work-code';
-import { UpdateCompanyWorkDto } from './dto/update-company-work.dto';
+import { UpdateWorkDto } from './dto/update-work.dto';
 
 @Injectable()
 export class WorksService {
@@ -19,13 +18,13 @@ export class WorksService {
       },
     });
 
-    const code = generateOrderCode(countToday + 1); 
+    const code = generateOrderCode(countToday + 1);
 
     return await this.prisma.works.create({
       data: {
         userId: createWorkDto.userId,
         companyId: createWorkDto.companyId,
-        workCode: code
+        workCode: code,
       },
     });
   }
@@ -44,30 +43,47 @@ export class WorksService {
       where: { id },
       include: {
         User: true,
-        company: true,        
+        company: true,
       },
     });
   }
 
-  async updateStatusWork(id: string, updateStatusWorkDto: UpdateStatusWorkDto) {
+  async updateStatusWork(id: string, updateWorkDto: UpdateWorkDto) {
     try {
       return this.prisma.works.update({
         where: { id },
-        data: updateStatusWorkDto,
+        data: updateWorkDto,
       });
     } catch (error) {
       console.log(error);
     }
   }
-  async updateCompanyInWork(id: string, updateCompanyWorkDto: UpdateCompanyWorkDto) {
+
+  async updateCompanyInWork(id: string, updateWorkDto: UpdateWorkDto) {
     try {
       return this.prisma.works.update({
         where: { id },
-        data: updateCompanyWorkDto,
+        data: updateWorkDto,
       });
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async findAllWorkByTechnician(technicianId: string) {
+    return await this.prisma.works.findMany({
+      where: {
+        technicians: {
+          some: {
+            technicianId, // <- aquí filtramos en la tabla intermedia
+          },
+        },
+      },
+      include: {
+        User: true,
+        company: true,       
+      },
+    });
   }
 
   async remove(id: string) {

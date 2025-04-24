@@ -40,6 +40,9 @@ export class StepstoworksService {
       orderBy: {
         order: 'asc',
       },
+      include: {
+        user: true,
+      },
     });
   } 
 

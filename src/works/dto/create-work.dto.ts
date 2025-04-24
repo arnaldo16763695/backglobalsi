@@ -8,8 +8,8 @@ export class CreateWorkDto {
     // @IsString()
     // finalObservations?: string
     @IsString()
-    userId?:           string
+    userId?:           string;
     @IsString()
-    companyId?:        string   
+    companyId?:        string;
   
 } 
