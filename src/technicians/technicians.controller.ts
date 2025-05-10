@@ -54,7 +54,7 @@ export class TechniciansController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.techniciansService.findOne(+id);
+    return this.techniciansService.findOne(id);
   }
 
   @Patch(':id')
@@ -62,11 +62,11 @@ export class TechniciansController {
     @Param('id') id: string,
     @Body() updateTechnicianDto: UpdateTechnicianDto,
   ) {
-    return this.techniciansService.update(+id, updateTechnicianDto);
+    return this.techniciansService.update(id, updateTechnicianDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.techniciansService.remove(+id);
+  @Delete('removefromwork/:idwork/:idtechnician')
+  remove(@Param('idwork') idwork: string, @Param('idtechnician') idtechnician: string) {
+    return this.techniciansService.remove(idwork, idtechnician);
   }
 }

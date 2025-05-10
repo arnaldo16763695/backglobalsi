@@ -68,15 +68,22 @@ export class TechniciansService {
     }
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} technician`;
   }
 
-  update(id: number, updateTechnicianDto: UpdateTechnicianDto) {
+  update(id: string, updateTechnicianDto: UpdateTechnicianDto) {
     return `This action updates a #${id} technician`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} technician`;
+  remove(idwork: string, idtechnician: string) {
+    return this.prisma.workTechnician.delete({
+      where: {
+        workId_technicianId: {
+          workId: idwork,
+          technicianId: idtechnician,
+        },
+      },
+    });
   }
 }
