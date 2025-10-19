@@ -105,6 +105,21 @@ export class UsersService {
     return user;
   }
 
+   async findOneProfile(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!user) {
+      // throw new NotFoundException(`User with id: ${id} not found`);
+      throw new NotFoundException(
+        `El usuario con el id: ${id} no fue encontrado`,
+      );
+    }
+    return user;
+  }
+
   async changepass(id: string, updatePassUserDto: UpdatePassUserDto) {
     const user = await this.prisma.user.findUnique({
       where: {
