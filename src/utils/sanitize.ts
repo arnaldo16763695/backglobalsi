@@ -1,5 +1,5 @@
 // utils/sanitize.ts
-import * as sanitizeHtml from 'sanitize-html'; // ✔️ compatible con CommonJS
+import sanitizeHtml from 'sanitize-html'; // ✔️ compatible con CommonJS
 
 export function sanitize(value: string): string {
   return sanitizeHtml(value, {
@@ -7,3 +7,4 @@ export function sanitize(value: string): string {
     allowedAttributes: {},
   }).trim();
 }
+  
