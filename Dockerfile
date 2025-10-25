@@ -39,6 +39,6 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY package.json ./
 
-EXPOSE 3000
+EXPOSE 4000
 # aplica migraciones y arranca (si manejas migraciones)
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
