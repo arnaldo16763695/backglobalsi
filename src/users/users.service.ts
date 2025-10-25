@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -70,6 +71,67 @@ export class UsersService {
     }
   }
 
+  async updateProfile(
+    fromId: string,
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ) {
+    try {
+      if (fromId !== id) {
+        throw new UnauthorizedException(
+          'No tienes permiso para actualizar el perfil',
+        );
+      }
+      return await this.prisma.user.update({
+        data: updateUserDto,
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      // Si el error no es de Prisma, lo relanzamos para que se maneje en otro lugar
+      console.error('Error no manejado:', error);
+      throw error;
+    }
+  }
+
+  async changepassProfile(
+    id: string,
+    fromId: string,
+    updatePassUserDto: UpdatePassUserDto,
+  ) {
+    if (id !== fromId) {
+      throw new UnauthorizedException(
+        'No tienes permiso para cambiar la contraseña',
+      );
+    }
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+        status: {
+          in: ['ACTIVE', 'INACTIVE'],
+        },
+      },
+    });
+    if (!user) {
+      // throw new NotFoundException(`User with id: ${id} not found`);
+      throw new NotFoundException(
+        `El usuario con el id: ${id} no fue encontrado`,
+      );
+    }
+
+    try {
+      return this.prisma.user.update({
+        where: {
+          id,
+        },
+        data: updatePassUserDto,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   findAll() {
     try {
       return this.prisma.user.findMany({
@@ -105,7 +167,7 @@ export class UsersService {
     return user;
   }
 
-   async findOneProfile(id: string) {
+  async findOneProfile(id: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         id,
@@ -147,8 +209,6 @@ export class UsersService {
       console.log(error);
     }
   }
-
-
 
   async remove(id: string) {
     const user = await this.prisma.user.findUnique({

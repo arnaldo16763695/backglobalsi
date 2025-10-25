@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Post,
-  Body,
+  Body, 
   Patch,
   Param,
   Delete,
@@ -65,6 +65,16 @@ export class UsersController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @Patch('profile/:id/:fromId')
+  updateProfile(@Param('id') id: string, @Param('fromId') fromId: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateProfile(fromId, id, updateUserDto);
+  }
+
+  @Patch('changepassprofile/:id/:fromId')
+  changepassProfile(@Param('id') id: string, @Param('fromId') fromId: string, @Body() updatePassUserDto: UpdatePassUserDto) {
+    return this.usersService.changepassProfile(id, fromId, updatePassUserDto);
   }
 
   @Roles('ADMIN')
