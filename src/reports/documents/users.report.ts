@@ -3,7 +3,7 @@ import type {
   Content,
   StyleDictionary,
   TDocumentDefinitions,
-} from 'pdfMake/interfaces';
+} from 'pdfmake/interfaces';
 
 const logo: Content = {
   image: 'src/assets/images/LogoGlobal-n.png',
