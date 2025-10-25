@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import PdfPrinter from 'pdfmake';
-import { TDocumentDefinitions } from 'pdfMake/interfaces';
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
 
 // Define font files
 const fonts = {
