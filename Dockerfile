@@ -39,7 +39,7 @@ COPY --from=builder /usr/src/app/prisma ./prisma
 ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
 
 # Expone el puerto por defecto de NestJS
-EXPOSE 3000
+EXPOSE 4000
 
 # Comando para iniciar la aplicación en modo producción
 CMD ["node", "dist/main"]
