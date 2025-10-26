@@ -29,6 +29,7 @@ WORKDIR /app
 # Prisma runtime deps
 RUN apk add --no-cache libc6-compat openssl
 ENV NODE_ENV=production
+ENV PORT=4000   
 
 # usuario no root
 RUN addgroup -S nodejs && adduser -S nestjs -G nodejs
