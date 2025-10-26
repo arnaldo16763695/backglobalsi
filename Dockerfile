@@ -47,5 +47,4 @@ EXPOSE 4000
 # Al iniciar el contenedor:
 # 1) aplica migraciones (usa DATABASE_URL de Dokploy)
 # 2) arranca Nest
-RUN ls -la /usr/src/app && ls -la /usr/src/app/dist || true
-CMD ["sh","-c","npx prisma migrate deploy && node dist/main"]
+CMD ["sh","-c","npx prisma migrate deploy && node dist/src/main.js"]
