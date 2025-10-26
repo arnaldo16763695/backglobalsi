@@ -1,48 +1,23 @@
-# syntax=docker.io/docker/dockerfile:1
+# Use the official Node.js image as the base image
+FROM node:20
 
-########################
-# deps
-########################
-FROM node:20-alpine AS deps
-WORKDIR /app
-RUN apk add --no-cache libc6-compat
-COPY package.json package-lock.json ./
-# Incluye devDependencies para tener 'prisma' CLI disponible
-RUN npm ci --include=dev
+# Set the working directory inside the container
+WORKDIR /usr/src/app
 
-########################
-# builder
-########################
-FROM node:20-alpine AS builder
-WORKDIR /app
-# Trae node_modules resueltos
-COPY --from=deps /app/node_modules ./node_modules
-# Copia el código y compila Nest (src -> dist)
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+
+# Install the application dependencies
+RUN npm install
+
+# Copy the rest of the application files
 COPY . .
+
+# Build the NestJS application
 RUN npm run build
 
-########################
-# runner
-########################
-FROM node:20-alpine AS runner
-WORKDIR /app
-# Dependencias nativas necesarias para Prisma en Alpine
-RUN apk add --no-cache libc6-compat openssl
-
-ENV NODE_ENV=production
-ENV PORT=4000
-
-# Trae node_modules (incluye @prisma/client y prisma CLI)
-COPY --from=deps /app/node_modules ./node_modules
-
-# Artefactos mínimos
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
-COPY package.json ./
-
+# Expose the application port
 EXPOSE 4000
 
-# 1) Genera el cliente (garantiza node_modules/.prisma/client)
-# 2) Aplica migraciones
-# 3) Arranca Nest
-CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy && node dist/main.js"]
+# Command to run the application
+CMD ["node", "dist/main"]
