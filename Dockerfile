@@ -1,45 +1,48 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:20-alpine AS base
-
-# ---------- deps ----------
-FROM base AS deps
+########################
+# deps
+########################
+FROM node:20-alpine AS deps
 WORKDIR /app
 RUN apk add --no-cache libc6-compat
 COPY package.json package-lock.json ./
-RUN npm ci
+# Incluye devDependencies para tener 'prisma' CLI disponible
+RUN npm ci --include=dev
 
-# ---------- builder ----------
-FROM base AS builder
+########################
+# builder
+########################
+FROM node:20-alpine AS builder
 WORKDIR /app
-
-# node_modules del stage deps
+# Trae node_modules resueltos
 COPY --from=deps /app/node_modules ./node_modules
-
-# copia Prisma primero para cache estable y genera cliente
-COPY prisma ./prisma
-RUN npx prisma generate
-
-# copia el resto del código y compila Nest
+# Copia el código y compila Nest (src -> dist)
 COPY . .
 RUN npm run build
 
-# ---------- runner ----------
-FROM base AS runner
+########################
+# runner
+########################
+FROM node:20-alpine AS runner
 WORKDIR /app
-
-# Prisma en alpine requiere estas libs en runtime
+# Dependencias nativas necesarias para Prisma en Alpine
 RUN apk add --no-cache libc6-compat openssl
 
 ENV NODE_ENV=production
+ENV PORT=4000
 
-# trae artefactos necesarios
+# Trae node_modules (incluye @prisma/client y prisma CLI)
 COPY --from=deps /app/node_modules ./node_modules
+
+# Artefactos mínimos
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY package.json ./
 
-EXPOSE 3000
+EXPOSE 4000
 
-# Ejecuta migraciones antes de arrancar Nest
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
+# 1) Genera el cliente (garantiza node_modules/.prisma/client)
+# 2) Aplica migraciones
+# 3) Arranca Nest
+CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy && node dist/main.js"]
