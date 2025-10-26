@@ -1,28 +1,25 @@
 # Etapa 1: Build
 FROM node:18.18-alpine AS builder
 
-# Establece el directorio de trabajo
 WORKDIR /usr/src/app
 
-# Instala dependencias necesarias para compilar módulos nativos (prisma y otros)
+# Dependencias para compilar módulos nativos (bcrypt, prisma engines, etc.)
 RUN apk add --no-cache build-base python3
 
-# Instala node-gyp globalmente (requerido para compilación)
+# (opcional) node-gyp, si tu proyecto realmente lo requiere
 RUN npm install -g node-gyp
 
-# Copia los archivos de dependencias para instalar los packages
+# Instala deps
 COPY package*.json ./
-
-# Instala las dependencias de la aplicación
 RUN npm install
 
-# Copia el resto de la aplicación
+# Copia el resto
 COPY . .
 
-# Genera el cliente Prisma
+# Genera Prisma Client (build-time)
 RUN npx prisma generate
 
-# Compila el proyecto NestJS
+# Compila Nest
 RUN npm run build
 
 # Etapa 2: Producción
@@ -30,16 +27,24 @@ FROM node:18.18-alpine
 
 WORKDIR /usr/src/app
 
-# Copia node_modules y código compilado desde la etapa build
+# Libs necesarias para Prisma en Alpine (runtime)
+RUN apk add --no-cache libc6-compat openssl
+
+# Copia artefactos
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/prisma ./prisma
+COPY package.json ./
 
-# Variable de entorno útil para Prisma en algunos entornos
+# Prisma tip
 ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+# Tu app escucha en 4000
+ENV NODE_ENV=production
+ENV PORT=4000
 
-# Expone el puerto por defecto de NestJS
 EXPOSE 4000
 
-# Comando para iniciar la aplicación en modo producción
-CMD ["node", "dist/main"]
+# Al iniciar el contenedor:
+# 1) aplica migraciones (usa DATABASE_URL de Dokploy)
+# 2) arranca Nest
+CMD ["sh","-c","npx prisma migrate deploy && node dist/main"]
