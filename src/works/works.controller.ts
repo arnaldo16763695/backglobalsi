@@ -32,7 +32,7 @@ export class WorksController {
 
   @ApiOperation({ summary: 'Get a specific work' })
   @ApiResponse({ status: 200, description: 'The work has been successfully retrieved.' })
-  @Roles('ADMIN')
+  @Roles('ADMIN', 'TECHNICIAN')
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.worksService.findOne(id);

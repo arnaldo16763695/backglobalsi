@@ -35,7 +35,7 @@ export class StepstoworksController {
 
   @ApiOperation({ summary: 'Get all steps by work id' })
   @ApiResponse({ status: 200, description: 'The steps have been successfully retrieved.' })
-  @Roles('ADMIN')
+  @Roles('ADMIN','TECHNICIAN')
   @Get(':id')
   findByIdWork(@Param('id') id: string) {
     return this.stepstoworksService.findStepsByWorkId(id);

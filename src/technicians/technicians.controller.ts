@@ -44,7 +44,7 @@ export class TechniciansController {
     status: 200,
     description: 'The technicians have been successfully retrieved.',
   })
-  @Roles('ADMIN')
+  @Roles('ADMIN', 'TECHNICIAN')
   @Get(':workId')
   findOneTechnicianInWork(
     @Param('workId') workId: string,
