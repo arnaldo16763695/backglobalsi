@@ -71,6 +71,7 @@ model StepsToWork {
   worksId          String
   user             User?              @relation(fields: [userId], references: [id])
   userId           String
+  status           StatusSteps        @default(PENDING)
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   ImagesStepToWork ImagesStepToWork[]
@@ -149,4 +150,9 @@ enum Status {
   ACTIVE
   INACTIVE
   DELETED
+}
+
+enum StatusSteps {
+  PENDING
+  FINISHED
 }
