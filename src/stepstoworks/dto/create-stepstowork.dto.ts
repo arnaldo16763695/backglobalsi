@@ -1,5 +1,6 @@
-import { IsString, IsNotEmpty, IsInt } from "class-validator";
+import { IsString, IsNotEmpty, IsInt, IsOptional } from "class-validator";
 import { Sanitize } from '@/decorators/sanitize.decorator';
+import { StatusSteps } from "@prisma/client";
 
 export class CreateStepstoworkDto {
   @Sanitize()
@@ -20,5 +21,10 @@ export class CreateStepstoworkDto {
   @Sanitize()
   @IsString()
   @IsNotEmpty()
-  userId: string;
+  userId: string;  
+
+  @Sanitize()
+  @IsString()
+  @IsOptional()
+  status: StatusSteps;
 }

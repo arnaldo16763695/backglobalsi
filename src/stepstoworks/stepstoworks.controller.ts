@@ -41,7 +41,23 @@ export class StepstoworksController {
     return this.stepstoworksService.findStepsByWorkId(id);
   }
 
-  @Roles('ADMIN')
+  @ApiOperation({ summary: 'Get all pending steps by work id' })
+  @ApiResponse({ status: 200, description: 'The steps have been successfully retrieved.' })
+  @Roles('ADMIN','TECHNICIAN')
+  @Get('pending/:id')
+  findPendingSteps(@Param('id') id: string) {
+    return this.stepstoworksService.findPendingSteps(id);
+  }
+
+  @ApiOperation({ summary: 'Get all finished steps by work id' })
+  @ApiResponse({ status: 200, description: 'The steps have been successfully retrieved.' })
+  @Roles('ADMIN','TECHNICIAN')
+  @Get('finished/:id')
+  findFinishedSteps(@Param('id') id: string) {
+    return this.stepstoworksService.findFinishedSteps(id);
+  }
+
+  @Roles('ADMIN','TECHNICIAN')
   @Patch(':id')
   editStepToWork(@Param('id') id: string, @Body() updateStepstoworkDto: UpdateStepstoworkDto) {
     return this.stepstoworksService.editStepToWork(id, updateStepstoworkDto);

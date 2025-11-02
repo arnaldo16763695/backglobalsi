@@ -44,45 +44,72 @@ export class StepstoworksService {
         user: true,
       },
     });
-  } 
+  }
 
- async reorderSteps(
-  id: string,
-  reorderStepstoworkDto: ReorderStepstoworkDto
-  ) {
+  findPendingSteps(worksId: string) {
+    return this.prisma.stepsToWork.findMany({
+      where: {
+        worksId,
+        status: 'PENDING',
+      },
+      orderBy: {
+        order: 'asc',
+      },
+      include: {
+        user: true,
+      },
+    });
+  }
+
+  findFinishedSteps(worksId: string) {
+    return this.prisma.stepsToWork.findMany({
+      where: {
+        worksId,
+        status: 'FINISHED',
+      },
+      orderBy: {
+        order: 'asc',
+      },
+      include: {
+        user: true,
+      },
+    });
+  }
+
+  async reorderSteps(id: string, reorderStepstoworkDto: ReorderStepstoworkDto) {
     // Transacción: actualiza todos los pasos
-   const res = await this.prisma.$transaction(
+    const res = await this.prisma.$transaction(
       reorderStepstoworkDto.ordered.map(({ id, order }) =>
-        this.prisma.stepsToWork.update({ where: { id }, data: { order } })
-      )
+        this.prisma.stepsToWork.update({ where: { id }, data: { order } }),
+      ),
     );
-    console.log(res)
+    console.log(res);
     return res;
   }
 
- async  editStepToWork(id: string, updateStepstoworkDto: UpdateStepstoworkDto){
-  try {
-    const item = await this.prisma.stepsToWork.update({
-      where: { id },
-      data: updateStepstoworkDto,
-    });
+  async editStepToWork(id: string, updateStepstoworkDto: UpdateStepstoworkDto) {
+    try {
+      const item = await this.prisma.stepsToWork.update({
+        where: { id },
+        data: updateStepstoworkDto,
+      });
 
-    return {
-      statusCode: HttpStatus.CREATED,
-      data: item,
-      message: 'The item has been successfully edited.',
-    };
-  } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      if (error.code === 'P2002') {
-        throw new ConflictException(
-          `Ya existe un item con esta descripción:  ${updateStepstoworkDto.description},  en esta orden`,
-        );
+      return {
+        statusCode: HttpStatus.CREATED,
+        data: item,
+        message: 'The item has been successfully edited.',
+      };
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictException(
+            `Ya existe un item con esta descripción:  ${updateStepstoworkDto.description},  en esta orden`,
+          );
+        }
       }
+      console.log(error);
     }
-    console.log(error);
   }
- }
 
   findOne(id: number) {
     return `This action returns a #${id} stepstowork`;
