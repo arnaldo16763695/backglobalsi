@@ -5,10 +5,10 @@ import { TDocumentDefinitions } from 'pdfmake/interfaces';
 // Define font files
 const fonts = {
     Roboto: {
-      normal: 'fonts/Roboto-Regular.ttf',
-      bold: 'fonts/Roboto-Medium.ttf',
-      italics: 'fonts/Roboto-Italic.ttf',
-      bolditalics: 'fonts/Roboto-MediumItalic.ttf'
+      normal: process.env.FONTS_PATH + 'Roboto-Regular.ttf',
+      bold: process.env.FONTS_PATH + 'Roboto-Medium.ttf',
+      italics: process.env.FONTS_PATH + 'Roboto-Italic.ttf',
+      bolditalics: process.env.FONTS_PATH + 'Roboto-MediumItalic.ttf'
     }
   };
 
@@ -21,4 +21,4 @@ export class PrinterService {
     createPdf(docDefinition: TDocumentDefinitions) {
         return this.printer.createPdfKitDocument(docDefinition);
     }
-}
+} 

@@ -6,7 +6,7 @@ import type {
 } from 'pdfmake/interfaces';
 
 const logo: Content = {
-  image: 'src/assets/images/LogoGlobal-n.png',
+  image: process.env.LOGO_PATH,
   width: 100,
 };
 
