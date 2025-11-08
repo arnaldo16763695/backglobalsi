@@ -78,6 +78,7 @@ export class WorksService {
             technicianId, // <- aquí filtramos en la tabla intermedia
           },
         },
+        progress: 'IN_PROGRESS'
       },
       include: {
         User: true,
