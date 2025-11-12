@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsEmail, IsOptional } from 'class-validator';
-import { Sanitize } from '@/decorators/sanitize.decorator';
+import { Sanitize } from '../../decorators/sanitize.decorator';
 import { Role, Status } from '@prisma/client'; // Importa el enum Role desde Prisma
 
 export class CreateUserDto{

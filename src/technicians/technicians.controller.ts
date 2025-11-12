@@ -10,10 +10,9 @@ import {
 import { TechniciansService } from './technicians.service';
 import { CreateTechnicianDto } from './dto/create-technician.dto';
 import { UpdateTechnicianDto } from './dto/update-technician.dto';
-import { Roles } from '@/decorators/roles.decorator';
-import { UsersService } from '@/users/users.service';
-import { JwtGuard } from '@/auth/guard/jwt.guard';
-import { RolesGuard } from '@/auth/guard/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { JwtGuard } from '../auth/guard/jwt.guard';
+import { RolesGuard } from '../auth/guard/roles.guard';
 import { UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 

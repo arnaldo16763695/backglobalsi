@@ -1,4 +1,4 @@
-import { Sanitize } from '@/decorators/sanitize.decorator';
+import { Sanitize } from '../../decorators/sanitize.decorator';
 import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
 
 

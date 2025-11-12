@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateWorkDto } from './dto/create-work.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { generateOrderCode } from '@/utils/generate-work-code';
+import { generateOrderCode } from '../utils/generate-work-code';
 import { UpdateWorkDto } from './dto/update-work.dto';
 
 @Injectable()

@@ -8,7 +8,7 @@ import {
 } from "class-validator";
 import { Type } from "class-transformer";
 import { StepOrderDto } from "./step-order.dto";
-import { Sanitize } from "@/decorators/sanitize.decorator";
+import { Sanitize } from "../../decorators/sanitize.decorator";
 
 export class ReorderStepstoworkDto {
   @Sanitize()

@@ -1,4 +1,4 @@
-import { sanitize } from '@/utils/sanitize';
+import { sanitize } from '../utils/sanitize';
 
 // decorators/sanitize.decorator.ts
 import { Transform } from 'class-transformer';

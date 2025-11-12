@@ -4,8 +4,8 @@ import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { Roles } from '@/decorators/roles.decorator';
-import { RolesGuard } from '@/auth/guard/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { RolesGuard } from '../auth/guard/roles.guard';
 
 @Controller('clients')
 @UseGuards(JwtGuard, RolesGuard)

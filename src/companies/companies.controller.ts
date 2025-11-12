@@ -5,8 +5,8 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { Roles } from '@/decorators/roles.decorator';
-import { RolesGuard } from '@/auth/guard/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { RolesGuard } from '../auth/guard/roles.guard';
 
 @UseGuards(JwtGuard, RolesGuard)
 @Controller('companies')

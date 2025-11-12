@@ -3,9 +3,9 @@ import { StepstoworksService } from './stepstoworks.service';
 import { CreateStepstoworkDto } from './dto/create-stepstowork.dto';
 import { UpdateStepstoworkDto } from './dto/update-stepstowork.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Roles } from '@/decorators/roles.decorator';
+import { Roles } from '../decorators/roles.decorator';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { RolesGuard } from '@/auth/guard/roles.guard';
+import { RolesGuard } from '../auth/guard/roles.guard';
 import { UseGuards } from '@nestjs/common';
 import { ReorderStepstoworkDto } from './dto/reorder-stepstowork.dto';
 

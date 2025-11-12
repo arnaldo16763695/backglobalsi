@@ -14,8 +14,8 @@ import { UpdatePassUserDto } from './dto/update-password-user.dto';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
 import { UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { RolesGuard } from '@/auth/guard/roles.guard';
-import { Roles } from '@/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guard/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
 
 @UseGuards(JwtGuard, RolesGuard)
 @Controller('users')
