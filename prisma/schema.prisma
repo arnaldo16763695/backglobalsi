@@ -6,11 +6,13 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["debian-openssl-3.0.x","rhel-openssl-3.0.x","native"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")     // directa (5432) para migrate
 }
 
 model User {
