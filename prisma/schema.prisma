@@ -10,9 +10,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")     // directa (5432) para migrate
+  provider  = "postgresql"
+
+  // URL para Prisma Client (usa el pooled que ya te da Vercel/Supabase)
+  url       = env("POSTGRES_PRISMA_URL")
+
+  // URL directa (sin pooling) para migraciones
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
