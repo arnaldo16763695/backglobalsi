@@ -1,12 +1,16 @@
 import { Clients } from '@prisma/client';
+import { resolveLogoPath } from '../../utils/helpers';
+
 import type {
   Content,
   StyleDictionary,
   TDocumentDefinitions,
 } from 'pdfmake/interfaces';
 
+const logoPath = resolveLogoPath();
+
 const logo: Content = {
-  image: process.env.LOGO_PATH,
+  image: logoPath,
   width: 100,
 };
 
