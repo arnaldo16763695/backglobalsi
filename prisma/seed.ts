@@ -7,7 +7,7 @@ async function main() {
   const password = await hash('12345678', 10)
 
   // 🔁 Usuario ADMIN
-  const adminEmail = 'admin@example.com'
+  const adminEmail = 'admin@globalsi.cl'
   const adminExists = await prisma.user.findUnique({ where: { email: adminEmail } })
 
   const admin = adminExists
