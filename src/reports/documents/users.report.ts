@@ -1,4 +1,4 @@
-import { resolveLogoPath } from '@/utils/helpers';
+import { resolveLogoPath } from '../../utils/helpers';
 import { User } from '@prisma/client';
 import type {
   Content,

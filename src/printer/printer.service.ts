@@ -1,4 +1,4 @@
-import { resolveFontsPath } from "@/utils/helpers";
+import { resolveFontsPath } from "../utils/helpers";
 import { Injectable } from "@nestjs/common";
 import PdfPrinter from "pdfmake";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
