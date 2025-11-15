@@ -66,3 +66,35 @@ export function resolveFontsPath(): string {
     `Fonts no encontrado en:\n- ${distPath}\n- ${srcPath}`,
   );
 }
+
+
+
+const CHILE_TZ = 'America/Santiago' as const;
+
+export function getChileParts(now = new Date()) {
+  const formatter = new Intl.DateTimeFormat('es-CL', {
+    timeZone: CHILE_TZ,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+  const parts = formatter.formatToParts(now);
+  const year = parts.find((p) => p.type === 'year')!.value;   // p.ej. "2025"
+  const month = parts.find((p) => p.type === 'month')!.value; // "11"
+  const day = parts.find((p) => p.type === 'day')!.value;     // "15"
+
+  return { year, month, day };
+}
+
+export function getChileStartOfTodayUTC(now = new Date()): Date {
+  const { year, month, day } = getChileParts(now);
+
+  const y = Number(year);
+  const m = Number(month); // 1-12
+  const d = Number(day);
+
+  // Creamos un Date en UTC con la medianoche de Chile
+  // (funciona bien porque la DB guarda en UTC)
+  return new Date(Date.UTC(y, m - 1, d, 0, 0, 0));
+}
