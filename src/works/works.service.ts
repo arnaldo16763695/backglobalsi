@@ -3,18 +3,19 @@ import { CreateWorkDto } from './dto/create-work.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { generateOrderCode } from '../utils/generate-work-code';
 import { UpdateWorkDto } from './dto/update-work.dto';
+import { getChileStartOfTodayUTC } from '../utils/helpers';
 
 @Injectable()
 export class WorksService {
   constructor(private prisma: PrismaService) {}
 
   async create(createWorkDto: CreateWorkDto) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+
+    const startOfTodayChileUtc = getChileStartOfTodayUTC();
 
     const countToday = await this.prisma.works.count({
       where: {
-        createdAt: { gte: today },
+        createdAt: { gte: startOfTodayChileUtc },
       },
     });
 
