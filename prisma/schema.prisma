@@ -32,6 +32,7 @@ model User {
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
   works         Works[]
+  ImagesWorks   ImagesWorks[]
   audiLog       AuditLog[]
   assignedWorks WorkTechnician[] // trabajos que le asignaron como técnico
   StepsToWork   StepsToWork[]
@@ -96,6 +97,9 @@ model ImagesStepToWork {
 model ImagesWorks {
   id        String   @id @default(uuid())
   url       String
+  imageKey  String
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String
   Works     Works?   @relation(fields: [worksId], references: [id])
   worksId   String
   createdAt DateTime @default(now())
