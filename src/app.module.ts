@@ -10,10 +10,11 @@ import { TechniciansModule } from './technicians/technicians.module';
 import { ReportsController } from './reports/reports.controller';
 import { ReportsModule } from './reports/reports.module';
 import { PrinterModule } from './printer/printer.module';
+import { ImagestoworkModule } from './imagestowork/imagestowork.module';
 
 
 @Module({
-  imports: [UsersModule, ClientsModule, CompaniesModule, AuthModule, WorksModule, AuditsModule, StepstoworksModule, TechniciansModule, ReportsModule, PrinterModule],
+  imports: [UsersModule, ClientsModule, CompaniesModule, AuthModule, WorksModule, AuditsModule, StepstoworksModule, TechniciansModule, ReportsModule, PrinterModule, ImagestoworkModule],
   controllers: [ReportsController],
   providers: [],
 })

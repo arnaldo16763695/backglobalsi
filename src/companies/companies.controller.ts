@@ -1,6 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
-import { UseGuards } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -13,7 +12,7 @@ import { RolesGuard } from '../auth/guard/roles.guard';
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
-  @ApiOperation({ summary: 'Create a new company' })
+  @ApiOperation({ summary: 'Create a new company' }) 
   @ApiResponse({ status: 201, description: 'The company has been successfully created.' })
   @Roles('ADMIN')
   @Post()
