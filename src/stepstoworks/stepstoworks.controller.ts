@@ -58,9 +58,9 @@ export class StepstoworksController {
   }
 
   @Roles('ADMIN','TECHNICIAN')
-  @Patch(':id')
-  editStepToWork(@Param('id') id: string, @Body() updateStepstoworkDto: UpdateStepstoworkDto) {
-    return this.stepstoworksService.editStepToWork(id, updateStepstoworkDto);
+  @Patch(':id/:workId')
+  editStepToWork(@Param('id') id: string, @Param('workId') workId: string, @Body() updateStepstoworkDto: UpdateStepstoworkDto) {
+    return this.stepstoworksService.editStepToWork(id, workId, updateStepstoworkDto);
   }
 
   @Get(':id')
@@ -68,8 +68,9 @@ export class StepstoworksController {
     return this.stepstoworksService.findOne(+id);
   } 
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.stepstoworksService.remove(id);
+  @Roles('ADMIN','TECHNICIAN')
+  @Delete(':id/:idWork')
+  remove(@Param('id') id: string, @Param('idWork') idWork: string) {
+    return this.stepstoworksService.remove(id, idWork);
   }
 }
