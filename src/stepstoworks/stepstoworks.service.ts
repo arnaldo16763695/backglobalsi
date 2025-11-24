@@ -139,29 +139,17 @@ export class StepstoworksService {
 
   async remove(id: string, idWork: string) {
     try {
-      const check = await this.prisma.stepsToWork.count({
-        where: {
-          worksId: idWork,
-        },
-      });
-
       const statusFinished = await this.prisma.works.findFirst({
         where: {
           id: idWork,
           progress: "FINISHED",
         },
       });
-
-      if (check === 1 && statusFinished) {
-        return {
-          error: "hay un error",
-          message: "No puede eliminar una tarea de una orden Finalizada",
-        };
-      }
+     
       if (statusFinished) {
         return {
           error: "hay un error",
-          message: "No puede eliminar un técnico de una orden finalizada",
+          message: "No puede eliminar una tarea de una orden Finalizada",
         };
       }
 
