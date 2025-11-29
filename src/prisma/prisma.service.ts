@@ -8,8 +8,8 @@ import {
 import { PrismaClient } from '@prisma/client';
 import { Pool, PoolConfig } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { parse as parseConnectionString } from 'pg-connection-string';
 
-// Usamos SIEMPRE la misma variable que en prisma.config.ts
 const connectionString = process.env.POSTGRES_PRISMA_URL;
 
 if (!connectionString) {
@@ -18,29 +18,33 @@ if (!connectionString) {
   );
 }
 
-// Detectamos si la URL parece de Supabase (remota)
-const isSupabase =
-  connectionString.includes('supabase.co') ||
-  connectionString.includes('supabase.com') ||
-  connectionString.includes('pooler.supabase');
+const parsed = parseConnectionString(connectionString);
 
-// Config base del pool
+const isSupabase =
+  (parsed.host ?? '').includes('supabase') ||
+  (parsed.host ?? '').includes('pooler.supabase');
+
 const poolConfig: PoolConfig = {
-  connectionString,
+  host: parsed.host,
+  port: parsed.port ? Number(parsed.port) : 5432,
+  user: parsed.user,
+  password: parsed.password,
+  database: parsed.database,
 };
 
-// ✅ Si es Supabase (tanto en local como en Vercel) → usamos SSL pero
-//    desactivamos la validación estricta del certificado (self-signed).
 if (isSupabase) {
   poolConfig.ssl = {
     rejectUnauthorized: false,
   };
 }
 
-// 👀 Log para verificar qué está usando realmente
 console.log('PRISMA POOL CONFIG =>', {
-  connectionString,
-  ssl: poolConfig.ssl ? 'enabled (rejectUnauthorized=false)' : 'disabled',
+  host: poolConfig.host,
+  port: poolConfig.port,
+  database: poolConfig.database,
+  ssl: poolConfig.ssl
+    ? 'enabled (rejectUnauthorized=false)'
+    : 'disabled',
 });
 
 const pool = new Pool(poolConfig);
