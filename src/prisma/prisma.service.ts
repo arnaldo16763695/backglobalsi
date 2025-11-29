@@ -18,24 +18,30 @@ if (!connectionString) {
   );
 }
 
+// Detectamos si la URL parece de Supabase (remota)
+const isSupabase =
+  connectionString.includes('supabase.co') ||
+  connectionString.includes('supabase.com') ||
+  connectionString.includes('pooler.supabase');
+
 // Config base del pool
 const poolConfig: PoolConfig = {
   connectionString,
 };
 
-// Detectamos si es local o remoto (Supabase)
-const isLocal =
-  connectionString.includes('localhost') ||
-  connectionString.includes('127.0.0.1');
-
-// En producción (Supabase / Vercel):
-// - activamos SSL
-// - pero no rechazamos el certificado self-signed
-if (!isLocal) {
+// ✅ Si es Supabase (tanto en local como en Vercel) → usamos SSL pero
+//    desactivamos la validación estricta del certificado (self-signed).
+if (isSupabase) {
   poolConfig.ssl = {
     rejectUnauthorized: false,
   };
 }
+
+// 👀 Log para verificar qué está usando realmente
+console.log('PRISMA POOL CONFIG =>', {
+  connectionString,
+  ssl: poolConfig.ssl ? 'enabled (rejectUnauthorized=false)' : 'disabled',
+});
 
 const pool = new Pool(poolConfig);
 
