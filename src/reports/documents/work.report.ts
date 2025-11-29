@@ -1,7 +1,4 @@
-
-import type { 
-  TDocumentDefinitions,
-} from "pdfmake/interfaces";
+import type { TDocumentDefinitions } from "pdfmake/interfaces";
 import { WorkWithRelations } from "./types/work-report.types";
 import { logo, mystyles, myFooter, infoCompay, reportDate } from "./formats";
 
@@ -45,7 +42,22 @@ export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
             alignment: "left",
           },
           {
-            text: reportDate.text,
+            text: [
+              {
+                text:
+                  "Fecha: " +
+                  new Date().toLocaleDateString("es-CL", {
+                    timeZone: "America/Santiago",
+                  }) +
+                  " \n",
+                style: "h3",
+              },
+              "Hora: " +
+                new Date().toLocaleTimeString("es-CL", {
+                  timeZone: "America/Santiago",
+                }) +
+                " \n",
+            ],
             alignment: "right",
           },
         ],

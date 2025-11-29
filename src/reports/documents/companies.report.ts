@@ -1,24 +1,21 @@
-import { Company } from '@prisma/client';
-import type {
-  TDocumentDefinitions,
-} from 'pdfmake/interfaces';
-import { infoCompay, logo, myFooter, mystyles, reportDate } from './formats';
-
+import { Company } from "@prisma/client";
+import type { TDocumentDefinitions } from "pdfmake/interfaces";
+import { infoCompay, logo, myFooter, mystyles, reportDate } from "./formats";
 
 const styles = mystyles;
 
 export const companyReport = (companies: Company[]): TDocumentDefinitions => {
   return {
-    pageSize: 'A4',
+    pageSize: "A4",
 
     header: {
-      text: 'Reporte de empresas',
-      alignment: 'right',
+      text: "Reporte de empresas",
+      alignment: "right",
       margin: [10, 10],
     },
     footer: {
       text: myFooter.text,
-      alignment: 'right',
+      alignment: "right",
       margin: [10, 10],
     },
     content: [
@@ -26,7 +23,7 @@ export const companyReport = (companies: Company[]): TDocumentDefinitions => {
       {
         canvas: [
           {
-            type: 'line',
+            type: "line",
             x1: 0,
             y1: 5,
             x2: 515,
@@ -42,12 +39,27 @@ export const companyReport = (companies: Company[]): TDocumentDefinitions => {
         margin: [0, 10],
         columns: [
           {
-            text: infoCompay.text ,
-            alignment: 'left',
+            text: infoCompay.text,
+            alignment: "left",
           },
           {
-            text: reportDate.text,
-            alignment: 'right',
+            text: [
+              {
+                text:
+                  "Fecha: " +
+                  new Date().toLocaleDateString("es-CL", {
+                    timeZone: "America/Santiago",
+                  }) +
+                  " \n",
+                style: "h3",
+              },
+              "Hora: " +
+                new Date().toLocaleTimeString("es-CL", {
+                  timeZone: "America/Santiago",
+                }) +
+                " \n",
+            ],
+            alignment: "right",
           },
         ],
       },
@@ -60,23 +72,23 @@ export const companyReport = (companies: Company[]): TDocumentDefinitions => {
 
       {
         margin: [0, 10],
-        text: 'Reporte de empresas',
-        alignment: 'center',
-        style: 'h1',
+        text: "Reporte de empresas",
+        alignment: "center",
+        style: "h1",
       },
 
       // tabla con los datos
 
       {
         margin: [0, 10],
-        layout: 'lightHorizontalLines',
+        layout: "lightHorizontalLines",
         table: {
-          widths: ['*', 'auto'],
+          widths: ["*", "auto"],
           headerRows: 1,
           body: [
             [
-              { text: 'Nombre', style: 'h3' },
-              { text: 'Email', style: 'h3' },
+              { text: "Nombre", style: "h3" },
+              { text: "Email", style: "h3" },
             ],
             ...companies.map((company) => [company.companyName, company.email]),
           ],
