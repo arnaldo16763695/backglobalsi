@@ -8,7 +8,9 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Prisma } from "@prisma/client";
+
+
 import { UpdatePassUserDto } from './dto/update-password-user.dto';
 import { hash } from 'bcrypt';
 
@@ -58,7 +60,7 @@ export class UsersService {
         },
       });
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           throw new ConflictException(
             `El usuario con el email: ${updateUserDto.email}, ya existe`,

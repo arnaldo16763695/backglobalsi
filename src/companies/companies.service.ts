@@ -6,7 +6,7 @@ import {
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class CompaniesService {
@@ -20,7 +20,7 @@ export class CompaniesService {
 
       return company;
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           throw new ConflictException(
             `El Rut: ${createCompanyDto.rut}, ya existe`,
@@ -103,7 +103,7 @@ export class CompaniesService {
         data: updateCompanyDto,
       });
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           throw new ConflictException(
             `La empresa con el rut: ${updateCompanyDto.rut}, ya existe`,

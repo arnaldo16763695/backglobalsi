@@ -2,7 +2,7 @@ import { ConflictException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateTechnicianDto } from "./dto/create-technician.dto";
 import { UpdateTechnicianDto } from "./dto/update-technician.dto";
 import { PrismaService } from "../prisma/prisma.service";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class TechniciansService {
@@ -22,7 +22,7 @@ export class TechniciansService {
         message: "The technician has been successfully assigned to the work.",
       };
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
           throw new ConflictException(`El técnico ya existe en esta orden`);
         }

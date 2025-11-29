@@ -7,7 +7,8 @@ import {
 import { CreateClientDto } from "./dto/create-client.dto";
 import { UpdateClientDto } from "./dto/update-client.dto";
 import { PrismaService } from "src/prisma/prisma.service";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
+// import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class ClientsService {
@@ -25,7 +26,7 @@ export class ClientsService {
         message: "The client has been successfully created.",
       };
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
           throw new ConflictException(
             `Email: ${createClientDto.email} o el rut: ${createClientDto.rut} , ya existe`
@@ -101,7 +102,7 @@ export class ClientsService {
         data: updateClientDto,
       });
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
           throw new ConflictException(`El cliente con el email: ${updateClientDto.email}, ya existe`);
           // throw new ConflictException(`User with id: ${id}, already exist`)

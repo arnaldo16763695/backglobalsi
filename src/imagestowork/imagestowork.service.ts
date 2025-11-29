@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CreateImagestoworkDto } from "./dto/create-imagestowork.dto";
 import { UpdateImagestoworkDto } from "./dto/update-imagestowork.dto";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()

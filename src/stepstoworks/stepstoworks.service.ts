@@ -2,7 +2,7 @@ import { HttpStatus, Injectable, ConflictException } from "@nestjs/common";
 import { CreateStepstoworkDto } from "./dto/create-stepstowork.dto";
 import { UpdateStepstoworkDto } from "./dto/update-stepstowork.dto";
 import { PrismaService } from "src/prisma/prisma.service";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
 import { ReorderStepstoworkDto } from "./dto/reorder-stepstowork.dto";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class StepstoworksService {
         message: "The item has been successfully created.",
       };
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
           throw new ConflictException(
             `Ya existe un item con esta descripción:  ${createStepstoworkDto.description},  en esta orden`
@@ -118,7 +118,7 @@ export class StepstoworksService {
         message: "The item has been successfully edited.",
       };
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
           throw new ConflictException(
             `Ya existe un item con esta descripción:  ${updateStepstoworkDto.description},  en esta orden`
