@@ -106,4 +106,24 @@ export class ReportsController {
     pdfDoc.pipe(res);
     pdfDoc.end();
   }
+
+  //work by id
+  @Get("work/:id")
+  async generateWorkReportById(
+    @Res() res: Response,
+    @Param("id") id: string
+  ) {
+    const pdfDoc = await this.reportsService.generateWorkReportById(
+      id
+    );
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="users-report.pdf"'
+    );
+    pdfDoc.info.Title = "Work Report";
+    pdfDoc.info.Author = "GlobalSi";
+    pdfDoc.pipe(res);
+    pdfDoc.end();
+  }
 }

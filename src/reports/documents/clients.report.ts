@@ -35,7 +35,6 @@ const styles: StyleDictionary = {
 export const clientsReport = (clients: Clients[]): TDocumentDefinitions => {
   return {
     pageSize: 'A4',
-
     header: {
       text: 'Reporte de clientes',
       alignment: 'right',

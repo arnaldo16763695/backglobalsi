@@ -4,8 +4,9 @@ import { PrinterService } from "src/printer/printer.service";
 import { usersReport } from "./documents/users.report";
 import { clientsReport } from "./documents/clients.report";
 import { PrismaService } from "src/prisma/prisma.service";
-import { Status } from '@prisma/client';
+import { Status } from "@prisma/client";
 import { companyReport } from "./documents/companies.report";
+import { workReport } from "./documents/work.report";
 
 @Injectable()
 export class ReportsService {
@@ -13,7 +14,8 @@ export class ReportsService {
     private prisma: PrismaService,
     private readonly printer: PrinterService
   ) {}
-  //Users report 
+
+  //Users report
   async generateUsersReport(): Promise<PDFKit.PDFDocument> {
     const users = await this.prisma.user.findMany();
     const docDefinition: TDocumentDefinitions = usersReport(users);
@@ -31,9 +33,9 @@ export class ReportsService {
     const docDefinition: TDocumentDefinitions = usersReport(users);
     return this.printer.createPdf(docDefinition);
   }
-  
-  //Clients report 
-  
+
+  //Clients report
+
   async generateClientsReport(): Promise<PDFKit.PDFDocument> {
     const clients = await this.prisma.clients.findMany();
     const docDefinition: TDocumentDefinitions = clientsReport(clients);
@@ -52,9 +54,9 @@ export class ReportsService {
     return this.printer.createPdf(docDefinition);
   }
 
-  //Companies report 
+  //Companies report
 
-   async generateCompaniesReport(): Promise<PDFKit.PDFDocument> {
+  async generateCompaniesReport(): Promise<PDFKit.PDFDocument> {
     const companies = await this.prisma.company.findMany();
     const docDefinition: TDocumentDefinitions = companyReport(companies);
     return this.printer.createPdf(docDefinition);
@@ -69,6 +71,39 @@ export class ReportsService {
       },
     });
     const docDefinition: TDocumentDefinitions = companyReport(companies);
+    return this.printer.createPdf(docDefinition);
+  }
+
+  //Work report
+  async generateWorkReportById(id: string): Promise<PDFKit.PDFDocument> {
+    const work = await this.prisma.works.findUnique({
+      where: {
+        id,
+        progress: "FINISHED",
+      },      
+      include: {
+        company: true,
+        stepsToWork: true,
+        technicians: {
+          include: {
+            technician: true, 
+          },
+        },
+      },
+    });
+    if (!work) {
+      const docDefinition: TDocumentDefinitions = {
+        content: [
+          {
+            text: "No existe un trabajo finalizado con este ID.",
+            fontSize: 14,
+          },
+        ],
+      };
+      return this.printer.createPdf(docDefinition);
+    }
+    const docDefinition: TDocumentDefinitions = workReport(work);
+
     return this.printer.createPdf(docDefinition);
   }
 }

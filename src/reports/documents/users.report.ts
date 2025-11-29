@@ -88,13 +88,7 @@ export const usersReport = (users: User[]): TDocumentDefinitions => {
           },
         ],
       },
-      // QR code
-      //   {
-      //     qr: 'https://www.google.com',
-      //     fit: 100,
-      //     alignment: 'right',
-      //   },
-
+    
       {
         margin: [0, 10],
         text: 'Reporte de usuarios',
