@@ -1,36 +1,13 @@
 import { Clients } from '@prisma/client';
-import { resolveLogoPath } from '../../utils/helpers';
 
 import type {
-  Content,
-  StyleDictionary,
   TDocumentDefinitions,
 } from 'pdfmake/interfaces';
+import { infoCompay, logo, myFooter, mystyles, reportDate } from './formats';
 
-const logoPath = resolveLogoPath();
 
-const logo: Content = {
-  image: logoPath,
-  width: 100,
-};
 
-const styles: StyleDictionary = {
-  h1: {
-    fontSize: 20,
-    bold: true,
-    margin: [0, 5],
-  },
-  h2: {
-    fontSize: 16,
-    bold: true,
-    margin: [0, 5],
-  },
-  h3: {
-    fontSize: 14,
-    bold: true,
-    margin: [0, 5],
-  },
-};
+const styles= mystyles
 
 export const clientsReport = (clients: Clients[]): TDocumentDefinitions => {
   return {
@@ -41,7 +18,7 @@ export const clientsReport = (clients: Clients[]): TDocumentDefinitions => {
       margin: [10, 10],
     },
     footer: {
-      text: 'Reporte de clientes, Globalsi',
+      text: myFooter.text,
       alignment: 'right',
       margin: [10, 10],
     },
@@ -66,21 +43,11 @@ export const clientsReport = (clients: Clients[]): TDocumentDefinitions => {
         margin: [0, 10],
         columns: [
           {
-            text: [
-              { text: 'Los Angeles, \n', style: 'h2' },
-              'numero de calle , \n',
-              'local, etc',
-            ],
+            text: infoCompay.text,
             alignment: 'left',
           },
           {
-            text: [
-              {
-                text: 'Fecha: ' + new Date().toLocaleDateString() + ' \n',
-                style: 'h2',
-              },
-              'Hora: ' + new Date().toLocaleTimeString() + ' \n',
-            ],
+            text: reportDate,
             alignment: 'right',
           },
         ],

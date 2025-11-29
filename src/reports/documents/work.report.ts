@@ -1,36 +1,11 @@
-import { resolveLogoPath } from "../../utils/helpers";
 
-import type {
-  Content,
-  StyleDictionary,
+import type { 
   TDocumentDefinitions,
 } from "pdfmake/interfaces";
 import { WorkWithRelations } from "./types/work-report.types";
+import { logo, mystyles, myFooter, infoCompay, reportDate } from "./formats";
 
-const logoPath = resolveLogoPath();
-
-const logo: Content = {
-  image: logoPath,
-  width: 100,
-};
-
-const styles: StyleDictionary = {
-  h1: {
-    fontSize: 20,
-    bold: true,
-    margin: [0, 5],
-  },
-  h2: {
-    fontSize: 16,
-    bold: true,
-    margin: [0, 5],
-  },
-  h3: {
-    fontSize: 14,
-    bold: true,
-    margin: [0, 5],
-  },
-};
+const styles = mystyles;
 
 export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
   return {
@@ -41,7 +16,7 @@ export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
       margin: [10, 10],
     },
     footer: {
-      text: "Globalsi Comunicaciones SPA, Tlf: 432452023,  Whats: +56 9 82303053, Email: contacto@globalsi.cl",
+      text: myFooter.text,
       alignment: "center",
       margin: [10, 10],
     },
@@ -66,21 +41,11 @@ export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
         margin: [0, 10],
         columns: [
           {
-            text: [
-              { text: "Los Angeles, \n", style: "h2" },
-              "Tromü 1441 , \n",
-              "Padre Las Casas",
-            ],
+            text: infoCompay.text,
             alignment: "left",
           },
           {
-            text: [
-              {
-                text: "Fecha: " + new Date().toLocaleDateString() + " \n",
-                style: "h3",
-              },
-              "Hora: " + new Date().toLocaleTimeString() + " \n",
-            ],
+            text: reportDate.text,
             alignment: "right",
           },
         ],
