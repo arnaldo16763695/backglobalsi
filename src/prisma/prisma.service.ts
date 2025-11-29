@@ -17,8 +17,16 @@ if (!connectionString) {
   throw new Error('POSTGRES_PRISMA_URL no está definida en el entorno del backend');
 }
 
+// 👇 Detectamos si estamos en local o en producción (Vercel)
+const isLocal =
+  connectionString.includes('localhost') ||
+  connectionString.includes('127.0.0.1');
+
+// 👇 En local: sin SSL
+// 👇 En Vercel/Supabase: SSL pero sin rechazar el certificado self-signed
 const pool = new Pool({
   connectionString,
+  ssl: isLocal ? undefined : { rejectUnauthorized: false },
 });
 
 @Injectable()
