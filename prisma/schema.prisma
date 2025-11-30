@@ -43,6 +43,7 @@ model Works {
   status            Status           @default(ACTIVE)
   stepsToWork       StepsToWork[]
   startedAt         DateTime?
+  assignedAt        DateTime?
   finishedAt        DateTime?
   updatedAt         DateTime         @updatedAt
   User              User?            @relation(fields: [userId], references: [id])

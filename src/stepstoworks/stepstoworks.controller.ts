@@ -17,7 +17,7 @@ export class StepstoworksController {
   
   @ApiOperation({ summary: 'Create a new stepstowork' })
   @ApiResponse({ status: 201, description: 'The stepstowork has been successfully created.' })
-  @Roles('ADMIN')
+  @Roles('ADMIN','TECHNICIAN')
   @Post()
   create(@Body() createStepstoworkDto: CreateStepstoworkDto) {
     return this.stepstoworksService.create(createStepstoworkDto);
@@ -25,7 +25,7 @@ export class StepstoworksController {
 
   @ApiOperation({ summary: 'Reorder steps' })
   @ApiResponse({ status: 200, description: 'The steps have been successfully reordered.' })
-  @Roles('ADMIN')
+  @Roles('ADMIN','TECHNICIAN')
   @Patch('reorder/:id')
   async reorderSteps(@Param('id') id: string,
   @Body() reorderStepstoworkDto: ReorderStepstoworkDto,) {
