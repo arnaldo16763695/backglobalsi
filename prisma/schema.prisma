@@ -46,6 +46,7 @@ model Works {
   assignedAt        DateTime?
   finishedAt        DateTime?
   updatedAt         DateTime         @updatedAt
+  isStarted         Boolean?         @default(false)
   User              User?            @relation(fields: [userId], references: [id])
   userId            String?
   company           Company?         @relation(fields: [companyId], references: [id])
