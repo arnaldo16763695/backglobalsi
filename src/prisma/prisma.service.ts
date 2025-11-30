@@ -38,14 +38,14 @@ if (isSupabase) {
   };
 }
 
-console.log('PRISMA POOL CONFIG =>', {
-  host: poolConfig.host,
-  port: poolConfig.port,
-  database: poolConfig.database,
-  ssl: poolConfig.ssl
-    ? 'enabled (rejectUnauthorized=false)'
-    : 'disabled',
-});
+// console.log('PRISMA POOL CONFIG =>', {
+//   host: poolConfig.host,
+//   port: poolConfig.port,
+//   database: poolConfig.database,
+//   ssl: poolConfig.ssl
+//     ? 'enabled (rejectUnauthorized=false)'
+//     : 'disabled',
+// });
 
 const pool = new Pool(poolConfig);
 
