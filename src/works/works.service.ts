@@ -1,16 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { CreateWorkDto } from './dto/create-work.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { generateOrderCode } from '../utils/generate-work-code';
-import { UpdateWorkDto } from './dto/update-work.dto';
-import { getChileStartOfTodayUTC } from '../utils/helpers';
+import { Injectable } from "@nestjs/common";
+import { CreateWorkDto } from "./dto/create-work.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { generateOrderCode } from "../utils/generate-work-code";
+import { UpdateWorkDto } from "./dto/update-work.dto";
+import { getChileStartOfTodayUTC } from "../utils/helpers";
 
 @Injectable()
 export class WorksService {
   constructor(private prisma: PrismaService) {}
 
   async create(createWorkDto: CreateWorkDto) {
-
     const startOfTodayChileUtc = getChileStartOfTodayUTC();
 
     const countToday = await this.prisma.works.count({
@@ -50,28 +49,20 @@ export class WorksService {
   }
 
   async updateStatusWork(id: string, updateWorkDto: UpdateWorkDto) {
-    try {
-      return this.prisma.works.update({
-        where: { id },
-        data: updateWorkDto,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    return this.prisma.works.update({
+      where: { id },
+      data: updateWorkDto,
+    });
   }
 
   async updateCompanyInWork(id: string, updateWorkDto: UpdateWorkDto) {
-    try {
-      return this.prisma.works.update({
-        where: { id },
-        data: updateWorkDto,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    return this.prisma.works.update({
+      where: { id },
+      data: updateWorkDto,
+    });
   }
 
-  async findAllWorkByTechnician(technicianId: string) {
+  async findAllWorkInProgressByTechnician(technicianId: string) {
     return await this.prisma.works.findMany({
       where: {
         technicians: {
@@ -79,11 +70,28 @@ export class WorksService {
             technicianId, // <- aquí filtramos en la tabla intermedia
           },
         },
-        progress: 'IN_PROGRESS'
+        progress: "IN_PROGRESS",
       },
       include: {
         User: true,
-        company: true,       
+        company: true,
+      },
+    });
+  }
+
+  async findAllWorkFinishedByTechnician(technicianId: string) {
+    return await this.prisma.works.findMany({
+      where: {
+        technicians: {
+          some: {
+            technicianId, // <- aquí filtramos en la tabla intermedia
+          },
+        },
+        progress: "FINISHED",
+      },
+      include: {
+        User: true,
+        company: true,
       },
     });
   }
@@ -91,6 +99,26 @@ export class WorksService {
   async remove(id: string) {
     return this.prisma.works.delete({
       where: { id },
+    });
+  }
+
+  async startsOrderbyTechnnician(idWork: string) {
+    return await this.prisma.works.update({
+      where: { id: idWork },
+      data: {
+        isStartedByTech: true,
+        startedByTechAt: new Date(),
+      },
+    });
+  }
+  async finishOrderbyTechnnician(idWork: string) {
+    return await this.prisma.works.update({
+      where: { id: idWork },
+      data: {
+        progress: "FINISHED",
+        finishedByTechAt: new Date(),
+        isFinishedByTech: true,
+      },
     });
   }
 }

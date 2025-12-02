@@ -46,9 +46,9 @@ export class ReportsController {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      'attachment; filename="users-report.pdf"'
+      'attachment; filename="clients-report.pdf"'
     );
-    pdfDoc.info.Title = "Users Report";
+    pdfDoc.info.Title = "Clients Report";
     pdfDoc.info.Author = "GlobalSi";
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -65,9 +65,9 @@ export class ReportsController {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      'attachment; filename="users-report.pdf"'
+      'attachment; filename="clients-report.pdf"'
     );
-    pdfDoc.info.Title = "Users Report";
+    pdfDoc.info.Title = "Clients Report";
     pdfDoc.info.Author = "GlobalSi";
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -80,9 +80,9 @@ export class ReportsController {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      'attachment; filename="users-report.pdf"'
+      'attachment; filename="companies-report.pdf"'
     );
-    pdfDoc.info.Title = "Users Report";
+    pdfDoc.info.Title = "Companies Report";
     pdfDoc.info.Author = "GlobalSi";
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -99,9 +99,9 @@ export class ReportsController {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      'attachment; filename="users-report.pdf"'
+      'attachment; filename="companies-report.pdf"'
     );
-    pdfDoc.info.Title = "Users Report";
+    pdfDoc.info.Title = "Companies Report";
     pdfDoc.info.Author = "GlobalSi";
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -119,9 +119,9 @@ export class ReportsController {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      'attachment; filename="users-report.pdf"'
+      'attachment; filename="order-report.pdf"'
     );
-    pdfDoc.info.Title = "Work Report";
+    pdfDoc.info.Title = "Order Report";
     pdfDoc.info.Author = "GlobalSi";
     pdfDoc.pipe(res);
     pdfDoc.end();

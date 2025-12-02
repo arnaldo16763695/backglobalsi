@@ -43,7 +43,15 @@ export class WorksController {
   @Roles('ADMIN', 'TECHNICIAN')
   @Get('technicians/:id')
   findAllWorkByTechnician(@Param('id') id: string) {
-    return this.worksService.findAllWorkByTechnician(id);
+    return this.worksService.findAllWorkInProgressByTechnician(id);
+  }
+
+  @ApiOperation({ summary: 'Get a specific work' })
+  @ApiResponse({ status: 200, description: 'The work has been successfully retrieved.' })
+  @Roles('ADMIN', 'TECHNICIAN')
+  @Get('technicians/finished/:id')
+  findAllWorkFinishedByTechnician(@Param('id') id: string) {
+    return this.worksService.findAllWorkFinishedByTechnician(id);
   }
 
   @ApiOperation({ summary: 'Update a specific work' })
@@ -52,6 +60,22 @@ export class WorksController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateWorkDto: UpdateWorkDto) {
     return this.worksService.updateStatusWork(id, updateWorkDto);
+  } 
+
+  @ApiOperation({ summary: 'Update a specific work' })
+  @ApiResponse({ status: 200, description: 'The work has been successfully started.' })
+  @Roles('ADMIN', 'TECHNICIAN')
+  @Patch('startsorder/:idWork')
+  startsOrderbyTechnnician(@Param('idWork') idWork: string) {
+    return this.worksService.startsOrderbyTechnnician(idWork);
+  } 
+
+  @ApiOperation({ summary: 'Update a specific work' })
+  @ApiResponse({ status: 200, description: 'The work has been successfully started.' })
+  @Roles('ADMIN', 'TECHNICIAN')
+  @Patch('finishorder/:idWork')
+  finishOrderbyTechnnician(@Param('idWork') idWork: string) {
+    return this.worksService.finishOrderbyTechnnician(idWork);
   } 
 
   @ApiOperation({ summary: 'Update a specific work' })

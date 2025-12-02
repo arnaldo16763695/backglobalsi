@@ -39,20 +39,21 @@ model Works {
   finalObservations String?
   progress          StatusProgress   @default(NOT_STARTED)
   images            ImagesWorks[]
-  createdAt         DateTime         @default(now())
   status            Status           @default(ACTIVE)
   stepsToWork       StepsToWork[]
-  startedAt         DateTime?
-  assignedAt        DateTime?
-  finishedAt        DateTime?
+  startedByTechAt   DateTime?
+  finishedByTechAt  DateTime?
+  assignedToTechAt  DateTime?
+  isStartedByTech   Boolean?         @default(false)
+  isFinishedByTech  Boolean?         @default(false)
+  createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
-  isStarted         Boolean?         @default(false)
   User              User?            @relation(fields: [userId], references: [id])
   userId            String?
   company           Company?         @relation(fields: [companyId], references: [id])
   companyId         String
   technicians       WorkTechnician[]
-}
+} 
 
 model WorkTechnician {
   work   Works  @relation(fields: [workId], references: [id])
