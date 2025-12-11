@@ -109,7 +109,9 @@ export class StepstoworksService {
 
       const item = await this.prisma.stepsToWork.update({
         where: { id },
-        data: updateStepstoworkDto,
+        data: {
+          status: updateStepstoworkDto.status
+        },
       });
 
       return {
