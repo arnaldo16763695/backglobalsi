@@ -1,9 +1,8 @@
-import { IsString, IsNotEmpty } from 'class-validator';
-import { Sanitize } from '../../decorators/sanitize.decorator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class UpdatePassUserDto {
-    @Sanitize()
-    @IsString()
-    @IsNotEmpty()
-    password: string;  
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
+  password: string;
 }

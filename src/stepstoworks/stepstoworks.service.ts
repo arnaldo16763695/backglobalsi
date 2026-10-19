@@ -1,9 +1,10 @@
-import { HttpStatus, Injectable, ConflictException } from "@nestjs/common";
-import { CreateStepstoworkDto } from "./dto/create-stepstowork.dto";
-import { UpdateStepstoworkDto } from "./dto/update-stepstowork.dto";
-import { PrismaService } from "src/prisma/prisma.service";
-import { Prisma } from "@prisma/client";
-import { ReorderStepstoworkDto } from "./dto/reorder-stepstowork.dto";
+import { HttpStatus, Injectable, ConflictException } from '@nestjs/common';
+import { CreateStepstoworkDto } from './dto/create-stepstowork.dto';
+import { UpdateStepstoworkDto } from './dto/update-stepstowork.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+import { ReorderStepstoworkDto } from './dto/reorder-stepstowork.dto';
+import { USER_SAFE_SELECT } from '../users/user-safe-select';
 
 @Injectable()
 export class StepstoworksService {
@@ -18,13 +19,13 @@ export class StepstoworksService {
       return {
         statusCode: HttpStatus.CREATED,
         data: item,
-        message: "The item has been successfully created.",
+        message: 'The item has been successfully created.',
       };
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
+        if (error.code === 'P2002') {
           throw new ConflictException(
-            `Ya existe un item con esta descripción:  ${createStepstoworkDto.description},  en esta orden`
+            `Ya existe un item con esta descripción:  ${createStepstoworkDto.description},  en esta orden`,
           );
         }
       }
@@ -38,10 +39,10 @@ export class StepstoworksService {
         worksId,
       },
       orderBy: {
-        order: "asc",
+        order: 'asc',
       },
       include: {
-        user: true,
+        user: { select: USER_SAFE_SELECT },
       },
     });
   }
@@ -50,13 +51,13 @@ export class StepstoworksService {
     return this.prisma.stepsToWork.findMany({
       where: {
         worksId,
-        status: "PENDING",
+        status: 'PENDING',
       },
       orderBy: {
-        order: "asc",
+        order: 'asc',
       },
       include: {
-        user: true,
+        user: { select: USER_SAFE_SELECT },
       },
     });
   }
@@ -65,13 +66,13 @@ export class StepstoworksService {
     return this.prisma.stepsToWork.findMany({
       where: {
         worksId,
-        status: "FINISHED",
+        status: 'FINISHED',
       },
       orderBy: {
-        order: "asc",
+        order: 'asc',
       },
       include: {
-        user: true,
+        user: { select: USER_SAFE_SELECT },
       },
     });
   }
@@ -80,8 +81,8 @@ export class StepstoworksService {
     // Transacción: actualiza todos los pasos
     const res = await this.prisma.$transaction(
       reorderStepstoworkDto.ordered.map(({ id, order }) =>
-        this.prisma.stepsToWork.update({ where: { id }, data: { order } })
-      )
+        this.prisma.stepsToWork.update({ where: { id }, data: { order } }),
+      ),
     );
     console.log(res);
     return res;
@@ -90,40 +91,41 @@ export class StepstoworksService {
   async editStepToWork(
     id: string,
     workId: string,
-    updateStepstoworkDto: UpdateStepstoworkDto
+    updateStepstoworkDto: UpdateStepstoworkDto,
   ) {
     try {
       const statusFinished = await this.prisma.works.findFirst({
         where: {
           id: workId,
-          progress: "FINISHED",
+          progress: 'FINISHED',
         },
       });
-      console.log(statusFinished)
+      console.log(statusFinished);
       if (statusFinished) {
         return {
-          error: "workFinished",
-          message: "La orden está Finalizada, debe cambiar su estatus para editar.",
+          error: 'workFinished',
+          message:
+            'La orden está Finalizada, debe cambiar su estatus para editar.',
         };
       }
 
       const item = await this.prisma.stepsToWork.update({
         where: { id },
         data: {
-          status: updateStepstoworkDto.status
+          status: updateStepstoworkDto.status,
         },
       });
 
       return {
         statusCode: HttpStatus.CREATED,
         data: item,
-        message: "The item has been successfully edited.",
+        message: 'The item has been successfully edited.',
       };
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
+        if (error.code === 'P2002') {
           throw new ConflictException(
-            `Ya existe un item con esta descripción:  ${updateStepstoworkDto.description},  en esta orden`
+            `Ya existe un item con esta descripción:  ${updateStepstoworkDto.description},  en esta orden`,
           );
         }
       }
@@ -131,27 +133,19 @@ export class StepstoworksService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} stepstowork`;
-  }
-
-  update(id: string, updateStepstoworkDto: UpdateStepstoworkDto) {
-    return `This action updates a #${id} stepstowork`;
-  }
-
   async remove(id: string, idWork: string) {
     try {
       const statusFinished = await this.prisma.works.findFirst({
         where: {
           id: idWork,
-          progress: "FINISHED",
+          progress: 'FINISHED',
         },
       });
-     
+
       if (statusFinished) {
         return {
-          error: "hay un error",
-          message: "No puede eliminar una tarea de una orden Finalizada",
+          error: 'hay un error',
+          message: 'No puede eliminar una tarea de una orden Finalizada',
         };
       }
 
@@ -159,7 +153,7 @@ export class StepstoworksService {
       return {
         statusCode: HttpStatus.CREATED,
         data: item,
-        message: "The item has been successfully deleted.",
+        message: 'The item has been successfully deleted.',
       };
     } catch (error) {
       console.log(error);

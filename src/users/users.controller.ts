@@ -1,28 +1,27 @@
 import {
+  Body,
   Controller,
   Get,
-  Post,
-  Body, 
-  Patch,
   Param,
-  Delete,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { JwtGuard } from 'src/auth/guard/jwt.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { RolesGuard } from '../auth/guard/roles.guard';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdatePassUserDto } from './dto/update-password-user.dto';
-import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { RolesGuard } from '../auth/guard/roles.guard';
-import { Roles } from '../decorators/roles.decorator';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @UseGuards(JwtGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-
 
   @Roles('ADMIN')
   @Post()
@@ -57,8 +56,8 @@ export class UsersController {
   }
 
   @Get('profile/:id')
-  findOneProfile(@Param('id') id: string) {
-    return this.usersService.findOneProfile(id);
+  findOneProfile(@Request() req: any) {
+    return this.usersService.findOneProfile(this.getUserId(req));
   }
 
   @Roles('ADMIN')
@@ -67,19 +66,37 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
+  @Patch('profile/:id')
+  updateProfile(@Request() req: any, @Body() updateUserDto: UpdateProfileDto) {
+    return this.usersService.updateProfile(this.getUserId(req), updateUserDto);
+  }
+
   @Patch('profile/:id/:fromId')
-  updateProfile(@Param('id') id: string, @Param('fromId') fromId: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateProfile(fromId, id, updateUserDto);
+  updateProfileLegacy(
+    @Request() req: any,
+    @Body() updateUserDto: UpdateProfileDto,
+  ) {
+    return this.usersService.updateProfile(this.getUserId(req), updateUserDto);
   }
 
   @Patch('changepassprofile/:id/:fromId')
-  changepassProfile(@Param('id') id: string, @Param('fromId') fromId: string, @Body() updatePassUserDto: UpdatePassUserDto) {
-    return this.usersService.changepassProfile(id, fromId, updatePassUserDto);
+  changepassProfile(
+    @Request() req: any,
+    @Body() updatePassUserDto: UpdatePassUserDto,
+  ) {
+    return this.usersService.changepassProfile(
+      this.getUserId(req),
+      updatePassUserDto,
+    );
   }
 
   @Roles('ADMIN')
   @Patch('delete/:id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
+  }
+
+  private getUserId(req: any): string {
+    return req.user?.sub ?? req.user?.id;
   }
 }

@@ -1,18 +1,18 @@
-import { Injectable } from "@nestjs/common";
-import { TDocumentDefinitions } from "pdfmake/interfaces";
-import { PrinterService } from "src/printer/printer.service";
-import { usersReport } from "./documents/users.report";
-import { clientsReport } from "./documents/clients.report";
-import { PrismaService } from "src/prisma/prisma.service";
-import { Status } from "@prisma/client";
-import { companyReport } from "./documents/companies.report";
-import { workReport } from "./documents/work.report";
+import { Injectable } from '@nestjs/common';
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
+import { PrinterService } from 'src/printer/printer.service';
+import { usersReport } from './documents/users.report';
+import { clientsReport } from './documents/clients.report';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Status } from '@prisma/client';
+import { companyReport } from './documents/companies.report';
+import { workReport } from './documents/work.report';
 
 @Injectable()
 export class ReportsService {
   constructor(
     private prisma: PrismaService,
-    private readonly printer: PrinterService
+    private readonly printer: PrinterService,
   ) {}
 
   //Users report
@@ -23,7 +23,7 @@ export class ReportsService {
   }
 
   async generateUsersReportByStatus(
-    filter: Status
+    filter: Status,
   ): Promise<PDFKit.PDFDocument> {
     const users = await this.prisma.user.findMany({
       where: {
@@ -43,7 +43,7 @@ export class ReportsService {
   }
 
   async generateClientsReportByStatus(
-    filter: Status
+    filter: Status,
   ): Promise<PDFKit.PDFDocument> {
     const clients = await this.prisma.clients.findMany({
       where: {
@@ -63,7 +63,7 @@ export class ReportsService {
   }
 
   async generateCompaniesReportByStatus(
-    filter: Status
+    filter: Status,
   ): Promise<PDFKit.PDFDocument> {
     const companies = await this.prisma.company.findMany({
       where: {
@@ -79,14 +79,18 @@ export class ReportsService {
     const work = await this.prisma.works.findUnique({
       where: {
         id,
-        progress: "FINISHED",
-      },      
+        progress: 'FINISHED',
+      },
       include: {
         company: true,
         stepsToWork: true,
         technicians: {
           include: {
-            technician: true, 
+            technician: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },
@@ -95,7 +99,7 @@ export class ReportsService {
       const docDefinition: TDocumentDefinitions = {
         content: [
           {
-            text: "No existe un trabajo finalizado con este ID.",
+            text: 'No existe un trabajo finalizado con este ID.',
             fontSize: 14,
           },
         ],

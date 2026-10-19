@@ -1,5 +1,5 @@
 // work-report.types.ts
-import { Prisma } from "@prisma/client";
+import { Prisma } from '@prisma/client';
 
 export type WorkWithRelations = Prisma.WorksGetPayload<{
   include: {
@@ -7,8 +7,12 @@ export type WorkWithRelations = Prisma.WorksGetPayload<{
     stepsToWork: true;
     technicians: {
       include: {
-        technician: true, 
-      },
-    },
+        technician: {
+          select: {
+            name: true;
+          };
+        };
+      };
+    };
   };
 }>;

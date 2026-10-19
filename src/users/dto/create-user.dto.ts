@@ -1,46 +1,51 @@
-import { IsString, IsNotEmpty, IsEmail, IsOptional } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { Role, Status } from '@prisma/client';
 import { Sanitize } from '../../decorators/sanitize.decorator';
-import { Role, Status } from '@prisma/client'; // Importa el enum Role desde Prisma
 
-export class CreateUserDto{
-    @Sanitize()
-    @IsString()
-    @IsNotEmpty()    
-    name: string;
+export class CreateUserDto {
+  @Sanitize()
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 
-    @Sanitize()
-    @IsString()
-    @IsNotEmpty()
-    @IsEmail()
-    email:string;
+  @Sanitize()
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
 
-    @Sanitize()
-    @IsString()
-    @IsNotEmpty()
-    password:string;
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
+  password: string;
 
-    @Sanitize()
-    @IsString()
-    @IsNotEmpty()
-    phone: string;
-    
-    @Sanitize()
-    @IsString()
-    @IsOptional()
-    avatar: string
+  @Sanitize()
+  @IsString()
+  @IsNotEmpty()
+  phone: string;
 
-    @Sanitize()
-    @IsString()
-    @IsOptional()
-    avatarKey: string
+  @Sanitize()
+  @IsString()
+  @IsOptional()
+  avatar?: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @IsOptional()
-    role: Role;
+  @Sanitize()
+  @IsString()
+  @IsOptional()
+  avatarKey?: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @IsOptional()
-    status: Status;
+  @IsEnum(Role)
+  @IsOptional()
+  role?: Role;
+
+  @IsEnum(Status)
+  @IsOptional()
+  status?: Status;
 }

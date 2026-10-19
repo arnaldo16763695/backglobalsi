@@ -1,9 +1,10 @@
-import { Injectable } from "@nestjs/common";
-import { CreateWorkDto } from "./dto/create-work.dto";
-import { PrismaService } from "../prisma/prisma.service";
-import { generateOrderCode } from "../utils/generate-work-code";
-import { UpdateWorkDto } from "./dto/update-work.dto";
-import { getChileStartOfTodayUTC } from "../utils/helpers";
+import { Injectable } from '@nestjs/common';
+import { CreateWorkDto } from './dto/create-work.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { generateOrderCode } from '../utils/generate-work-code';
+import { UpdateWorkDto } from './dto/update-work.dto';
+import { getChileStartOfTodayUTC } from '../utils/helpers';
+import { USER_SAFE_SELECT } from '../users/user-safe-select';
 
 @Injectable()
 export class WorksService {
@@ -32,7 +33,7 @@ export class WorksService {
   async findAll() {
     return this.prisma.works.findMany({
       include: {
-        User: true,
+        User: { select: USER_SAFE_SELECT },
         company: true,
       },
     });
@@ -42,7 +43,7 @@ export class WorksService {
     return this.prisma.works.findUnique({
       where: { id },
       include: {
-        User: true,
+        User: { select: USER_SAFE_SELECT },
         company: true,
       },
     });
@@ -70,10 +71,10 @@ export class WorksService {
             technicianId, // <- aquí filtramos en la tabla intermedia
           },
         },
-        progress: "IN_PROGRESS",
+        progress: 'IN_PROGRESS',
       },
       include: {
-        User: true,
+        User: { select: USER_SAFE_SELECT },
         company: true,
       },
     });
@@ -87,10 +88,10 @@ export class WorksService {
             technicianId, // <- aquí filtramos en la tabla intermedia
           },
         },
-        progress: "FINISHED",
+        progress: 'FINISHED',
       },
       include: {
-        User: true,
+        User: { select: USER_SAFE_SELECT },
         company: true,
       },
     });
@@ -115,7 +116,7 @@ export class WorksService {
     return await this.prisma.works.update({
       where: { id: idWork },
       data: {
-        progress: "FINISHED",
+        progress: 'FINISHED',
         finishedByTechAt: new Date(),
         isFinishedByTech: true,
       },

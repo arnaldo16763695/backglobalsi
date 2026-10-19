@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { TechniciansService } from './technicians.service';
 import { CreateTechnicianDto } from './dto/create-technician.dto';
-import { UpdateTechnicianDto } from './dto/update-technician.dto';
 import { Roles } from '../decorators/roles.decorator';
 import { JwtGuard } from '../auth/guard/jwt.guard';
 import { RolesGuard } from '../auth/guard/roles.guard';
@@ -34,7 +25,7 @@ export class TechniciansController {
   })
   @Roles('ADMIN')
   @Get()
-  getAllTech(){
+  getAllTech() {
     return this.techniciansService.getTechnicians();
   }
 
@@ -45,27 +36,16 @@ export class TechniciansController {
   })
   @Roles('ADMIN', 'TECHNICIAN')
   @Get(':workId')
-  findOneTechnicianInWork(
-    @Param('workId') workId: string,
-  ) {
+  findOneTechnicianInWork(@Param('workId') workId: string) {
     return this.techniciansService.getTechniciansInWork(workId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.techniciansService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTechnicianDto: UpdateTechnicianDto,
-  ) {
-    return this.techniciansService.update(id, updateTechnicianDto);
-  }
-
+  @Roles('ADMIN')
   @Delete('removefromwork/:idwork/:idtechnician')
-  remove(@Param('idwork') idwork: string, @Param('idtechnician') idtechnician: string) {
+  remove(
+    @Param('idwork') idwork: string,
+    @Param('idtechnician') idtechnician: string,
+  ) {
     return this.techniciansService.remove(idwork, idtechnician);
   }
 }
