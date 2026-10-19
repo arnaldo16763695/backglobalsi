@@ -1,5 +1,5 @@
 # Etapa 1: Build
-FROM node:18.18-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /usr/src/app
 
@@ -12,7 +12,7 @@ RUN npm install -g node-gyp
 # Instala deps
 COPY package*.json ./
 COPY prisma ./prisma
-RUN npm install
+RUN npm ci
 
 # Copia el resto
 COPY . .
@@ -24,7 +24,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # Etapa 2: Producción
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 
 WORKDIR /usr/src/app
 
