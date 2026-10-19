@@ -1,3 +1,11 @@
+packages:
+  - '.'
+
+onlyBuiltDependencies:
+  - '@prisma/engines'
+  - bcrypt
+  - prisma
+
 allowBuilds:
   '@nestjs/core': false
   '@prisma/engines': true
