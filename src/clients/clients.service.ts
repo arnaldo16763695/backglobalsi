@@ -3,11 +3,11 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
-} from "@nestjs/common";
-import { CreateClientDto } from "./dto/create-client.dto";
-import { UpdateClientDto } from "./dto/update-client.dto";
-import { PrismaService } from "src/prisma/prisma.service";
-import { Prisma } from "@prisma/client";
+} from '@nestjs/common';
+import { CreateClientDto } from './dto/create-client.dto';
+import { UpdateClientDto } from './dto/update-client.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 // import { Prisma } from "@prisma/client";
 
 @Injectable()
@@ -23,18 +23,18 @@ export class ClientsService {
       return {
         statusCode: HttpStatus.CREATED,
         data: client,
-        message: "The client has been successfully created.",
+        message: 'The client has been successfully created.',
       };
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
+        if (error.code === 'P2002') {
           throw new ConflictException(
-            `Email: ${createClientDto.email} o el rut: ${createClientDto.rut} , ya existe`
+            `Email: ${createClientDto.email} o el rut: ${createClientDto.rut} , ya existe`,
           );
           // throw new ConflictException(`User with name: ${createUserDto.name}, already exist`)
         }
       }
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -43,12 +43,12 @@ export class ClientsService {
       return this.prisma.clients.findMany({
         where: {
           status: {
-            in: ["ACTIVE", "INACTIVE"],
+            in: ['ACTIVE', 'INACTIVE'],
           },
         },
         include: { company: true },
         orderBy: {
-          updatedAt: "desc",
+          updatedAt: 'desc',
         },
       });
     } catch (error) {
@@ -62,14 +62,14 @@ export class ClientsService {
         where: {
           id,
           status: {
-            in: ["ACTIVE", "INACTIVE"],
+            in: ['ACTIVE', 'INACTIVE'],
           },
         },
       });
       if (!client) {
         // throw new NotFoundException(`User with id: ${id} not found`);
         throw new NotFoundException(
-          `El cliente con el id: ${id} no fue encontrado`
+          `El cliente con el id: ${id} no fue encontrado`,
         );
       }
       return client;
@@ -83,14 +83,14 @@ export class ClientsService {
       where: {
         id,
         status: {
-          in: ["ACTIVE", "INACTIVE"],
+          in: ['ACTIVE', 'INACTIVE'],
         },
       },
     });
     if (!client) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `El cliente con el id: ${id} no fue encontrado`
+        `El cliente con el id: ${id} no fue encontrado`,
       );
     }
 
@@ -103,8 +103,10 @@ export class ClientsService {
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
-          throw new ConflictException(`El cliente con el email: ${updateClientDto.email}, ya existe`);
+        if (error.code === 'P2002') {
+          throw new ConflictException(
+            `El cliente con el email: ${updateClientDto.email}, ya existe`,
+          );
           // throw new ConflictException(`User with id: ${id}, already exist`)
         }
       }
@@ -116,14 +118,14 @@ export class ClientsService {
       where: {
         id,
         status: {
-          in: ["ACTIVE", "INACTIVE"],
+          in: ['ACTIVE', 'INACTIVE'],
         },
       },
     });
     if (!user) {
       // throw new NotFoundException(`User with id: ${id} not found`);
       throw new NotFoundException(
-        `El cliente con el id: ${id} no fue encontrado`
+        `El cliente con el id: ${id} no fue encontrado`,
       );
     }
 
@@ -133,7 +135,7 @@ export class ClientsService {
           id,
         },
         data: {
-          status: "DELETED",
+          status: 'DELETED',
         },
       });
     } catch (error) {

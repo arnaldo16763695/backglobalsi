@@ -7,4 +7,3 @@ export function sanitize(value: string): string {
     allowedAttributes: {},
   }).trim();
 }
-  

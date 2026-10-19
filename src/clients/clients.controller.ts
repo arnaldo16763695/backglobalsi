@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
@@ -13,7 +21,10 @@ export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 
   @ApiOperation({ summary: 'Create a new client' })
-  @ApiResponse({ status: 201, description: 'The client has been successfully created.' })
+  @ApiResponse({
+    status: 201,
+    description: 'The client has been successfully created.',
+  })
   @Roles('ADMIN')
   @Post()
   create(@Body() createClientDto: CreateClientDto) {
@@ -21,15 +32,21 @@ export class ClientsController {
   }
 
   @ApiOperation({ summary: 'Get all clients' })
-  @ApiResponse({ status: 200, description: 'The clients have been successfully retrieved.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The clients have been successfully retrieved.',
+  })
   @Roles('ADMIN')
-  @Get()  
+  @Get()
   findAll() {
     return this.clientsService.findAll();
   }
 
   @ApiOperation({ summary: 'Get a client by id' })
-  @ApiResponse({ status: 200, description: 'The client has been successfully retrieved.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The client has been successfully retrieved.',
+  })
   @Roles('ADMIN')
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -37,15 +54,21 @@ export class ClientsController {
   }
 
   @ApiOperation({ summary: 'Update a client by id' })
-  @ApiResponse({ status: 200, description: 'The client has been successfully updated.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The client has been successfully updated.',
+  })
   @Roles('ADMIN')
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClientDto: UpdateClientDto) {
-    return this.clientsService.update(id, updateClientDto); 
+    return this.clientsService.update(id, updateClientDto);
   }
 
   @ApiOperation({ summary: 'Delete a client by id' })
-  @ApiResponse({ status: 200, description: 'The client has been successfully deleted.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The client has been successfully deleted.',
+  })
   @Roles('ADMIN')
   @Patch('delete/:id')
   remove(@Param('id') id: string) {

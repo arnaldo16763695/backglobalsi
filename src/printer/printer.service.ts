@@ -1,16 +1,16 @@
-import { resolveFontsPath } from "../utils/helpers";
-import { Injectable } from "@nestjs/common";
-import PdfPrinter from "pdfmake";
-import { TDocumentDefinitions } from "pdfmake/interfaces";
+import { resolveFontsPath } from '../utils/helpers';
+import { Injectable } from '@nestjs/common';
+import PdfPrinter from 'pdfmake';
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
 
 // Define font files
 const path = resolveFontsPath();
 const fonts = {
   Roboto: {
-    normal: path + "Roboto-Regular.ttf",
-    bold: path + "Roboto-Medium.ttf",
-    italics: path + "Roboto-Italic.ttf",
-    bolditalics: path + "Roboto-MediumItalic.ttf",
+    normal: path + 'Roboto-Regular.ttf',
+    bold: path + 'Roboto-Medium.ttf',
+    italics: path + 'Roboto-Italic.ttf',
+    bolditalics: path + 'Roboto-MediumItalic.ttf',
   },
 };
 

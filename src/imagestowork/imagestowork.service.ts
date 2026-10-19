@@ -1,8 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { CreateImagestoworkDto } from "./dto/create-imagestowork.dto";
-import { UpdateImagestoworkDto } from "./dto/update-imagestowork.dto";
-import { Prisma } from "@prisma/client";
-import { PrismaService } from "src/prisma/prisma.service";
+import { Injectable } from '@nestjs/common';
+import { CreateImagestoworkDto } from './dto/create-imagestowork.dto';
+import { UpdateImagestoworkDto } from './dto/update-imagestowork.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ImagestoworkService {
@@ -44,7 +43,7 @@ export class ImagestoworkService {
     return `This action returns a #${id} imagestowork`;
   }
 
-  update(id: number, updateImagestoworkDto: UpdateImagestoworkDto) {
+  update(id: number, _updateImagestoworkDto: UpdateImagestoworkDto) {
     return `This action updates a #${id} imagestowork`;
   }
 

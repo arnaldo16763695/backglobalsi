@@ -1,4 +1,3 @@
-
 import { getChileParts } from './helpers';
 
 export function generateOrderCode(sequence: number): string {

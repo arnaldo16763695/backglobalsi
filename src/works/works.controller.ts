@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { WorksService } from './works.service';
 import { CreateWorkDto } from './dto/create-work.dto';
 import { UpdateWorkDto } from './dto/update-work.dto';
@@ -8,14 +16,16 @@ import { Roles } from '../decorators/roles.decorator';
 import { RolesGuard } from '../auth/guard/roles.guard';
 import { UseGuards } from '@nestjs/common';
 
-
 @UseGuards(JwtGuard, RolesGuard)
 @Controller('works')
 export class WorksController {
   constructor(private readonly worksService: WorksService) {}
 
   @ApiOperation({ summary: 'Create a new work' })
-  @ApiResponse({ status: 201, description: 'The work has been successfully created.' })
+  @ApiResponse({
+    status: 201,
+    description: 'The work has been successfully created.',
+  })
   @Roles('ADMIN')
   @Post()
   create(@Body() createWorkDto: CreateWorkDto) {
@@ -23,7 +33,10 @@ export class WorksController {
   }
 
   @ApiOperation({ summary: 'Get all works' })
-  @ApiResponse({ status: 200, description: 'The works have been successfully retrieved.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The works have been successfully retrieved.',
+  })
   @Roles('ADMIN')
   @Get()
   findAll() {
@@ -31,7 +44,10 @@ export class WorksController {
   }
 
   @ApiOperation({ summary: 'Get a specific work' })
-  @ApiResponse({ status: 200, description: 'The work has been successfully retrieved.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The work has been successfully retrieved.',
+  })
   @Roles('ADMIN', 'TECHNICIAN')
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -39,7 +55,10 @@ export class WorksController {
   }
 
   @ApiOperation({ summary: 'Get a specific work' })
-  @ApiResponse({ status: 200, description: 'The work has been successfully retrieved.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The work has been successfully retrieved.',
+  })
   @Roles('ADMIN', 'TECHNICIAN')
   @Get('technicians/:id')
   findAllWorkByTechnician(@Param('id') id: string) {
@@ -47,7 +66,10 @@ export class WorksController {
   }
 
   @ApiOperation({ summary: 'Get a specific work' })
-  @ApiResponse({ status: 200, description: 'The work has been successfully retrieved.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The work has been successfully retrieved.',
+  })
   @Roles('ADMIN', 'TECHNICIAN')
   @Get('technicians/finished/:id')
   findAllWorkFinishedByTechnician(@Param('id') id: string) {
@@ -55,39 +77,57 @@ export class WorksController {
   }
 
   @ApiOperation({ summary: 'Update a specific work' })
-  @ApiResponse({ status: 200, description: 'The work has been successfully updated.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The work has been successfully updated.',
+  })
   @Roles('ADMIN')
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateWorkDto: UpdateWorkDto) {
     return this.worksService.updateStatusWork(id, updateWorkDto);
-  } 
+  }
 
   @ApiOperation({ summary: 'Update a specific work' })
-  @ApiResponse({ status: 200, description: 'The work has been successfully started.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The work has been successfully started.',
+  })
   @Roles('ADMIN', 'TECHNICIAN')
   @Patch('startsorder/:idWork')
   startsOrderbyTechnnician(@Param('idWork') idWork: string) {
     return this.worksService.startsOrderbyTechnnician(idWork);
-  } 
+  }
 
   @ApiOperation({ summary: 'Update a specific work' })
-  @ApiResponse({ status: 200, description: 'The work has been successfully started.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The work has been successfully started.',
+  })
   @Roles('ADMIN', 'TECHNICIAN')
   @Patch('finishorder/:idWork')
   finishOrderbyTechnnician(@Param('idWork') idWork: string) {
     return this.worksService.finishOrderbyTechnnician(idWork);
-  } 
+  }
 
   @ApiOperation({ summary: 'Update a specific work' })
-  @ApiResponse({ status: 200, description: 'The work has been successfully updated.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The work has been successfully updated.',
+  })
   @Roles('ADMIN')
   @Patch('companyinwork/:id')
-  updateCompanyInWork(@Param('id') id: string, @Body() updateWorkDto: UpdateWorkDto) {
+  updateCompanyInWork(
+    @Param('id') id: string,
+    @Body() updateWorkDto: UpdateWorkDto,
+  ) {
     return this.worksService.updateCompanyInWork(id, updateWorkDto);
-  } 
+  }
 
   @ApiOperation({ summary: 'Delete a specific work' })
-  @ApiResponse({ status: 200, description: 'The work has been successfully deleted.' })
+  @ApiResponse({
+    status: 200,
+    description: 'The work has been successfully deleted.',
+  })
   @Roles('ADMIN')
   @Delete(':id')
   remove(@Param('id') id: string) {

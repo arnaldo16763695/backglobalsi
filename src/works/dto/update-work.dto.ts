@@ -15,5 +15,4 @@ export class UpdateWorkDto extends PartialType(CreateWorkDto) {
   @IsEnum(StatusProgress)
   @IsOptional()
   progress?: StatusProgress;
- 
 }

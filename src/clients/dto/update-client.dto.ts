@@ -5,10 +5,7 @@ import { Status } from '@prisma/client';
 import { Transform } from 'class-transformer';
 
 export class UpdateClientDto extends PartialType(CreateClientDto) {
-    @IsEnum(Status)
-    @Transform(({ value }) => value?.trimStart())
-    status: Status;
+  @IsEnum(Status)
+  @Transform(({ value }) => value?.trimStart())
+  status: Status;
 }
-
-
-

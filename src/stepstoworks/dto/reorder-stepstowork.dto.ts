@@ -5,10 +5,10 @@ import {
   ArrayMinSize,
   IsString,
   IsNotEmpty,
-} from "class-validator";
-import { Type } from "class-transformer";
-import { StepOrderDto } from "./step-order.dto";
-import { Sanitize } from "../../decorators/sanitize.decorator";
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { StepOrderDto } from './step-order.dto';
+import { Sanitize } from '../../decorators/sanitize.decorator';
 
 export class ReorderStepstoworkDto {
   @Sanitize()

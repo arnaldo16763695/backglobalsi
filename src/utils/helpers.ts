@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as fs from 'node:fs';
 
-
 export function resolveLogoPath(): string {
   const root = process.cwd(); // raíz del proyecto
 
@@ -35,23 +34,12 @@ export function resolveLogoPath(): string {
   );
 }
 
-
 export function resolveFontsPath(): string {
   const root = process.cwd(); // raíz del proyecto
 
-  const distPath = path.join(
-    root,
-    'dist',
-    'assets',
-    'fonts/',
-  );
+  const distPath = path.join(root, 'dist', 'assets', 'fonts/');
 
-  const srcPath = path.join(
-    root,
-    'src',
-    'assets',
-    'fonts/',
-  );
+  const srcPath = path.join(root, 'src', 'assets', 'fonts/');
 
   if (fs.existsSync(distPath)) {
     return distPath;
@@ -62,12 +50,8 @@ export function resolveFontsPath(): string {
   }
 
   // Si no existe en ninguno, lanza un error claro
-  throw new Error(
-    `Fonts no encontrado en:\n- ${distPath}\n- ${srcPath}`,
-  );
+  throw new Error(`Fonts no encontrado en:\n- ${distPath}\n- ${srcPath}`);
 }
-
-
 
 const CHILE_TZ = 'America/Santiago' as const;
 
@@ -80,9 +64,9 @@ export function getChileParts(now = new Date()) {
   });
 
   const parts = formatter.formatToParts(now);
-  const year = parts.find((p) => p.type === 'year')!.value;   // p.ej. "2025"
+  const year = parts.find((p) => p.type === 'year')!.value; // p.ej. "2025"
   const month = parts.find((p) => p.type === 'month')!.value; // "11"
-  const day = parts.find((p) => p.type === 'day')!.value;     // "15"
+  const day = parts.find((p) => p.type === 'day')!.value; // "15"
 
   return { year, month, day };
 }

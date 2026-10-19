@@ -1,6 +1,5 @@
-import { IsString, IsNotEmpty, IsEmail } from "class-validator";
-import { Sanitize } from "../../decorators/sanitize.decorator";
-
+import { IsString, IsNotEmpty } from 'class-validator';
+import { Sanitize } from '../../decorators/sanitize.decorator';
 
 export class CreateImagestoworkDto {
   @Sanitize()
@@ -17,10 +16,9 @@ export class CreateImagestoworkDto {
   @IsString()
   @IsNotEmpty()
   userId: string;
-  
+
   @Sanitize()
   @IsString()
   @IsNotEmpty()
   worksId: string;
-
 }

@@ -8,4 +8,3 @@ export function Sanitize() {
     typeof value === 'string' ? sanitize(value) : value,
   );
 }
-

@@ -1,20 +1,20 @@
-import type { TDocumentDefinitions } from "pdfmake/interfaces";
-import { WorkWithRelations } from "./types/work-report.types";
-import { logo, mystyles, myFooter, infoCompay, reportDate } from "./formats";
+import type { TDocumentDefinitions } from 'pdfmake/interfaces';
+import { WorkWithRelations } from './types/work-report.types';
+import { logo, mystyles, myFooter, infoCompay } from './formats';
 
 const styles = mystyles;
 
 export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
   return {
-    pageSize: "A4",
+    pageSize: 'A4',
     header: {
-      text: "Orden de Trabajo",
-      alignment: "right",
+      text: 'Orden de Trabajo',
+      alignment: 'right',
       margin: [10, 10],
     },
     footer: {
       text: myFooter.text,
-      alignment: "center",
+      alignment: 'center',
       margin: [10, 10],
     },
     content: [
@@ -22,7 +22,7 @@ export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
       {
         canvas: [
           {
-            type: "line",
+            type: 'line',
             x1: 0,
             y1: 5,
             x2: 515,
@@ -39,40 +39,40 @@ export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
         columns: [
           {
             text: infoCompay.text,
-            alignment: "left",
+            alignment: 'left',
           },
           {
             text: [
               {
                 text:
-                  "Fecha: " +
-                  new Date().toLocaleDateString("es-CL", {
-                    timeZone: "America/Santiago",
+                  'Fecha: ' +
+                  new Date().toLocaleDateString('es-CL', {
+                    timeZone: 'America/Santiago',
                   }) +
-                  " \n",
-                style: "h3",
+                  ' \n',
+                style: 'h3',
               },
-              "Hora: " +
-                new Date().toLocaleTimeString("es-CL", {
-                  timeZone: "America/Santiago",
+              'Hora: ' +
+                new Date().toLocaleTimeString('es-CL', {
+                  timeZone: 'America/Santiago',
                 }) +
-                " \n",
+                ' \n',
             ],
-            alignment: "right",
+            alignment: 'right',
           },
         ],
       },
       {
         margin: [0, 10],
-        text: "Orden de Trabajo",
-        alignment: "center",
-        style: "h1",
+        text: 'Orden de Trabajo',
+        alignment: 'center',
+        style: 'h1',
       },
       {
         margin: [0, 10],
-        text: "Nº: " + work.workCode,
-        alignment: "left",
-        style: "h3",
+        text: 'Nº: ' + work.workCode,
+        alignment: 'left',
+        style: 'h3',
       },
 
       {
@@ -80,17 +80,17 @@ export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
         columns: [
           {
             text: [
-              { text: "Cliente:  ", style: "h3" },
-              { text: work.company.companyName, style: "h3" },
+              { text: 'Cliente:  ', style: 'h3' },
+              { text: work.company.companyName, style: 'h3' },
             ],
-            alignment: "left",
+            alignment: 'left',
           },
           {
             text: [
-              { text: "RUT:  ", style: "h3" },
-              { text: work.company.rut, style: "h3" },
+              { text: 'RUT:  ', style: 'h3' },
+              { text: work.company.rut, style: 'h3' },
             ],
-            alignment: "right",
+            alignment: 'right',
           },
         ],
       },
@@ -99,16 +99,16 @@ export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
 
       {
         margin: [0, 10],
-        layout: "lightHorizontalLines",
+        layout: 'lightHorizontalLines',
         table: {
-          widths: ["*", "auto"],
+          widths: ['*', 'auto'],
           headerRows: 1,
           body: [
             [
-              { text: "Técnicos encargados:", style: "h3" },
-              { text: "", style: "h3" },
+              { text: 'Técnicos encargados:', style: 'h3' },
+              { text: '', style: 'h3' },
             ],
-            ...work.technicians.map((step) => [step.technician.name, ""]),
+            ...work.technicians.map((step) => [step.technician.name, '']),
           ],
         },
       },
@@ -117,18 +117,18 @@ export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
 
       {
         margin: [0, 10],
-        layout: "lightHorizontalLines",
+        layout: 'lightHorizontalLines',
         table: {
-          widths: ["*", "auto"],
+          widths: ['*', 'auto'],
           headerRows: 1,
           body: [
             [
-              { text: "Se realizó:", style: "h3" },
-              { text: "", style: "h3" },
+              { text: 'Se realizó:', style: 'h3' },
+              { text: '', style: 'h3' },
             ],
             ...work.stepsToWork.map((step, i) => [
-              i + 1 + " - " + step.description,
-              "",
+              i + 1 + ' - ' + step.description,
+              '',
             ]),
           ],
         },
@@ -138,14 +138,14 @@ export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
 
       {
         margin: [0, 10],
-        text: "Observaciones: ",
-        alignment: "left",
-        style: "h3",
+        text: 'Observaciones: ',
+        alignment: 'left',
+        style: 'h3',
       },
       {
         canvas: [
           {
-            type: "line",
+            type: 'line',
             x1: 0,
             y1: 5,
             x2: 515,
@@ -157,8 +157,8 @@ export const workReport = (work: WorkWithRelations): TDocumentDefinitions => {
       {
         margin: [0, 10],
         text: work.finalObservations,
-        alignment: "left",
-        style: "h3",
+        alignment: 'left',
+        style: 'h3',
       },
     ],
     styles: styles,

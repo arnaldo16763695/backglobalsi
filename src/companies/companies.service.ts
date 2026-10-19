@@ -1,4 +1,4 @@
-import { 
+import {
   ConflictException,
   Injectable,
   NotFoundException,
@@ -6,7 +6,7 @@ import {
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma } from "@prisma/client";
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CompaniesService {

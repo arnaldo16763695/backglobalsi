@@ -7,12 +7,11 @@ import { UnauthorizedException } from '@nestjs/common';
 
 const EXPIRES_TIME = 30 * 60 * 1000;
 @Injectable()
-export class AuthService { 
+export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UsersService,
   ) {}
-
 
   async login(loginAuthDto: LoginAuthDto) {
     const user = await this.validateUser(loginAuthDto);
@@ -52,10 +51,10 @@ export class AuthService {
     const payload = {
       sub: user.id || user.sub, // asegura que siempre tenga el id
       email: user.email,
-      name: user.name,       
-      role: user.role,       
+      name: user.name,
+      role: user.role,
     };
-    
+
     return {
       accessToken: await this.jwtService.signAsync(payload, {
         expiresIn: '1h',
@@ -64,7 +63,7 @@ export class AuthService {
       refreshToken: await this.jwtService.signAsync(payload, {
         expiresIn: '7d',
         secret: process.env.JWT_REFRESH_TOKEN_KEY,
-      }), 
+      }),
       expiresIn: new Date().setTime(new Date().getTime() + EXPIRES_TIME),
     };
   }

@@ -1,21 +1,21 @@
-import { Clients } from "@prisma/client";
+import { Clients } from '@prisma/client';
 
-import type { TDocumentDefinitions } from "pdfmake/interfaces";
-import { infoCompay, logo, myFooter, mystyles, reportDate } from "./formats";
+import type { TDocumentDefinitions } from 'pdfmake/interfaces';
+import { infoCompay, logo, myFooter, mystyles } from './formats';
 
 const styles = mystyles;
 
 export const clientsReport = (clients: Clients[]): TDocumentDefinitions => {
   return {
-    pageSize: "A4",
+    pageSize: 'A4',
     header: {
-      text: "Reporte de clientes",
-      alignment: "right",
+      text: 'Reporte de clientes',
+      alignment: 'right',
       margin: [10, 10],
     },
     footer: {
       text: myFooter.text,
-      alignment: "right",
+      alignment: 'right',
       margin: [10, 10],
     },
     content: [
@@ -23,7 +23,7 @@ export const clientsReport = (clients: Clients[]): TDocumentDefinitions => {
       {
         canvas: [
           {
-            type: "line",
+            type: 'line',
             x1: 0,
             y1: 5,
             x2: 515,
@@ -40,26 +40,26 @@ export const clientsReport = (clients: Clients[]): TDocumentDefinitions => {
         columns: [
           {
             text: infoCompay.text,
-            alignment: "left",
+            alignment: 'left',
           },
           {
             text: [
               {
                 text:
-                  "Fecha: " +
-                  new Date().toLocaleDateString("es-CL", {
-                    timeZone: "America/Santiago",
+                  'Fecha: ' +
+                  new Date().toLocaleDateString('es-CL', {
+                    timeZone: 'America/Santiago',
                   }) +
-                  " \n",
-                style: "h3",
+                  ' \n',
+                style: 'h3',
               },
-              "Hora: " +
-                new Date().toLocaleTimeString("es-CL", {
-                  timeZone: "America/Santiago",
+              'Hora: ' +
+                new Date().toLocaleTimeString('es-CL', {
+                  timeZone: 'America/Santiago',
                 }) +
-                " \n",
+                ' \n',
             ],
-            alignment: "right",
+            alignment: 'right',
           },
         ],
       },
@@ -72,23 +72,23 @@ export const clientsReport = (clients: Clients[]): TDocumentDefinitions => {
 
       {
         margin: [0, 10],
-        text: "Reporte de clientes",
-        alignment: "center",
-        style: "h1",
+        text: 'Reporte de clientes',
+        alignment: 'center',
+        style: 'h1',
       },
 
       // tabla con los datos
 
       {
         margin: [0, 10],
-        layout: "lightHorizontalLines",
+        layout: 'lightHorizontalLines',
         table: {
-          widths: ["*", "auto"],
+          widths: ['*', 'auto'],
           headerRows: 1,
           body: [
             [
-              { text: "Nombre", style: "h3" },
-              { text: "Email", style: "h3" },
+              { text: 'Nombre', style: 'h3' },
+              { text: 'Email', style: 'h3' },
             ],
             ...clients.map((client) => [client.name, client.email]),
           ],

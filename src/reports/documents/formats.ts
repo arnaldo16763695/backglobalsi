@@ -1,5 +1,5 @@
-import { resolveLogoPath } from "../../utils/helpers";
-import type { Content, StyleDictionary } from "pdfmake/interfaces";
+import { resolveLogoPath } from '../../utils/helpers';
+import type { Content, StyleDictionary } from 'pdfmake/interfaces';
 
 export const logoPath = resolveLogoPath();
 
@@ -27,14 +27,14 @@ export const mystyles: StyleDictionary = {
 };
 
 export const myFooter = {
-  text: "Globalsi Comunicaciones SPA, Tlf: 432452023,  Whats: +56 9 82303053, Email: contacto@globalsi.cl",
+  text: 'Globalsi Comunicaciones SPA, Tlf: 432452023,  Whats: +56 9 82303053, Email: contacto@globalsi.cl',
 };
 
 export const infoCompay = {
   text: [
-    { text: "Los Angeles, \n", style: "h2" },
-    "Tromü 1441 , \n",
-    "Padre Las Casas",
+    { text: 'Los Angeles, \n', style: 'h2' },
+    'Tromü 1441 , \n',
+    'Padre Las Casas',
   ],
 };
 
@@ -42,17 +42,17 @@ export const reportDate = {
   text: [
     {
       text:
-        "Fecha: " +
-        new Date().toLocaleDateString("es-CL", {
-          timeZone: "America/Santiago",
+        'Fecha: ' +
+        new Date().toLocaleDateString('es-CL', {
+          timeZone: 'America/Santiago',
         }) +
-        " \n",
-      style: "h3",
+        ' \n',
+      style: 'h3',
     },
-    "Hora: " +
-      new Date().toLocaleTimeString("es-CL", {
-        timeZone: "America/Santiago",
+    'Hora: ' +
+      new Date().toLocaleTimeString('es-CL', {
+        timeZone: 'America/Santiago',
       }) +
-      " \n",
+      ' \n',
   ],
 };
