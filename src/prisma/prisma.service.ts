@@ -1,14 +1,9 @@
 // src/prisma/prisma.service.ts
 import 'dotenv/config';
-import {
-  Injectable,
-  OnModuleInit,
-  OnModuleDestroy,
-} from '@nestjs/common';
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { Pool, PoolConfig } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { parse as parseConnectionString } from 'pg-connection-string';
 
 const connectionString = process.env.POSTGRES_PRISMA_URL;
 
@@ -18,18 +13,18 @@ if (!connectionString) {
   );
 }
 
-const parsed = parseConnectionString(connectionString);
+const databaseUrl = new URL(connectionString);
 
 const isSupabase =
-  (parsed.host ?? '').includes('supabase') ||
-  (parsed.host ?? '').includes('pooler.supabase');
+  databaseUrl.hostname.includes('supabase') ||
+  databaseUrl.hostname.includes('pooler.supabase');
 
 const poolConfig: PoolConfig = {
-  host: parsed.host,
-  port: parsed.port ? Number(parsed.port) : 5432,
-  user: parsed.user,
-  password: parsed.password,
-  database: parsed.database,
+  host: databaseUrl.hostname,
+  port: databaseUrl.port ? Number(databaseUrl.port) : 5432,
+  user: decodeURIComponent(databaseUrl.username),
+  password: decodeURIComponent(databaseUrl.password),
+  database: decodeURIComponent(databaseUrl.pathname.replace(/^\//, '')),
 };
 
 if (isSupabase) {

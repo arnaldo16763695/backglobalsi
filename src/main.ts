@@ -1,19 +1,20 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import 'dotenv/config';
 import { ValidationPipe } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app.module';
+
+const REQUIRED_ENV = ['JWT_SECRET_KEY', 'JWT_REFRESH_TOKEN_KEY'];
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const missingEnv = REQUIRED_ENV.filter((key) => !process.env[key]);
+  if (missingEnv.length > 0) {
+    throw new Error(
+      `Faltan variables de entorno requeridas: ${missingEnv.join(', ')}`,
+    );
+  }
 
-  const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
-    .setVersion('1.0')
-    .addTag('cats')
-    .build();
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
+  const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
@@ -23,6 +24,30 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  await app.listen(4000);
+
+  if (process.env.CORS_ORIGIN) {
+    app.enableCors({
+      origin: process.env.CORS_ORIGIN.split(',').map((origin) => origin.trim()),
+      credentials: true,
+    });
+  }
+
+  const config = new DocumentBuilder()
+    .setTitle('GlobalSI API')
+    .setDescription('API de gestión de clientes, empresas y órdenes de trabajo')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, documentFactory);
+
+  app.enableShutdownHooks();
+
+  const port = Number(process.env.PORT) || 4000;
+  await app.listen(port);
 }
-bootstrap();
+
+bootstrap().catch((error) => {
+  console.error('No se pudo iniciar la aplicación:', error);
+  process.exit(1);
+});
