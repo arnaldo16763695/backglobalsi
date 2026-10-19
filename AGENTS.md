@@ -20,6 +20,7 @@ npx tsc --noEmit -p tsconfig.build.json  # typecheck sin tests ni specs
 
 Notas:
 - El paquete activo para desarrollo es **pnpm** (`pnpm-lock.yaml`, `pnpm-workspace.yaml`).
+- Versión fijada en `packageManager: pnpm@10.34.7` (por Corepack 0.24.1 de Nixpacks). Activarla con `corepack enable` o `npm i -g pnpm@10.34.7`.
 - Docker usa **npm ci** con `package-lock.json`. Mantener ambos lockfiles sincronizados hasta unificar el gestor.
 - La salida de build es `dist/src/main.js`.
 
