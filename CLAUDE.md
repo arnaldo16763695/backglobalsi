@@ -38,4 +38,4 @@ Lo siguiente complementa AGENTS.md con detalles que requieren leer varios archiv
 
 ## Despliegue
 
-- Dockerfile multi-stage (Node 22 alpine, `npm ci`); el contenedor ejecuta `prisma migrate deploy` antes de `node dist/src/main.js`. Nixpacks usa pnpm vía Corepack. `postinstall` ejecuta `prisma generate`.
+- Las migraciones se aplican al arrancar: el `CMD` del Dockerfile (Node 22 alpine, `npm ci`) y el script `start` (usado por Nixpacks, con pnpm vía Corepack) ejecutan `prisma migrate deploy` antes de `node dist/src/main.js`. `start:prod` arranca sin migrar. `postinstall` ejecuta `prisma generate`.

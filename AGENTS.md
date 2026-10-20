@@ -11,7 +11,7 @@ pnpm exec prisma migrate dev --name <nombre>  # nueva migración (desarrollo)
 pnpm exec prisma db push     # solo para desarrollo sin migraciones
 pnpm start:dev               # servidor en modo watch
 pnpm build                   # compila a dist/src/main.js
-pnpm start                   # ejecutar build (node dist/src/main.js)
+pnpm start                   # aplica migraciones pendientes y ejecuta el build
 pnpm lint                    # ESLint + Prettier (aplica --fix)
 pnpm test -- --runInBand     # tests
 pnpm test -- src/users/users.service.spec.ts --runInBand  # un solo test

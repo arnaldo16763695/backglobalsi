@@ -16,7 +16,7 @@
     "db:create-admin": "ts-node prisma/create-admin.ts",
     "db:generate": "prisma generate",
     "migrate:deploy": "prisma migrate deploy",
-    "start": "node dist/src/main.js",
+    "start": "prisma migrate deploy && node dist/src/main.js",
     "start:prod": "node dist/src/main.js",
     "start:dev": "nest start --watch",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
